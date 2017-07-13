@@ -1,0 +1,38 @@
+* {
+	margin: 0;
+}
+#logo {
+	height: 50px;
+	width: 66px;
+}
+#newCourse, #admin, #student, #editStudent, #course, #editCourse, #editAdmin, #userNavDis, #navLinks {
+	display: none;
+}
+main {
+	padding-top: 50px;
+	width: 100%;
+}
+.coursesUl, .courseUl, .studentsUl, .studentUl, .courseHeadUl, .studentsHeadUl{
+	list-style-type: none;
+	/*display: none;*/
+}
+.courseUl {
+	/*display: none;*/
+}
+#description {
+	border: 1px black solid;
+	box-sizing: border-box;
+	height: 500px;
+}
+.studentPhoto, .coursePhoto {
+	height: 60px;
+	width: 60px;
+	border: black solid 3px;
+}
+.studentsLi, .courseLi {
+	display:flex;
+    align-items:center;
+}
+h3 {
+	margin-left: 40px;
+}

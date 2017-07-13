@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>the school</title>
+	<link href="css/style.css" rel="stylesheet">
+	<link rel="stylesheet" href="css/bootstrap.css">
+	<script src="js/jquery-3.2.1.js"></script>
+	<script src="js/script.js"></script>
+	<script src="js/bootstrap.js"></script>
+</head>
+<body>
+<header class="page-header row">
+<nav class="navbar navbar-default navbar-fixed-top">
+  <div class="container-fluid">
+    <div class="navbar-header">
+        <img alt="Brand" src="uploads/img/logo2.jpg" id="logo">
+    </div>
+    <ul class="nav navbar-nav" id="navLinks">
+    		<li id="schoolLink"><a href="#"> school</a></li>
+    		<li id="adminLink"> <a href="#"> admin</a></li>
+    	</ul>
+        <p class="navbar-text navbar-right" id="userNavDis">Signed in as <a href="#" class="navbar-link">Mark Otto</a></p>
+  </div>
+</nav>
+</header>
+<main class="container">
+	<div id="login" style="display: none;" class="col-md-offset-4">
+		<label for="username"> username: </label>
+		<input type="text" id="username" name="username" placeholder="username"> <br>
+		<label for="pass"> password: </label>
+		<input type="text" id="pass" name="pass" placeholder="password"><br>
+		<button id="btn1" class="col-md-offset-2 col-md-2"> login</button>
+	</div>
+	<div id="index" class="container">
+		<div class="row">
+			<div id="coursesList" class="col-md-3">
+				<h3>
+					Courses 
+					<button type="button" class="btn btn-default" id="coureBtn" aria-label="justify">
+					<span aria-hidden="true" class="glyphicon glyphicon-plus"></span>
+					</button>
+				</h3>
+				<ul class="coursesUl">
+					<br>
+					<!-- 
+					<li class="courseLi">
+						<img  class="studentPhoto" src="uploads/img/logo2.jpg"> 
+						<ul class="courseUl">
+							<li> chemistry</li>
+							<li> course id #5</li>
+						</ul>
+					</li> -->
+				</ul>
+			</div>
+			<div id="studentsList" class="col-md-3">
+				<h3>
+					students 
+						<button type="button" class="btn btn-default" id="studentsBtn" aria-label="justify">
+						<span aria-hidden="true" class="glyphicon glyphicon-plus"></span>
+						</button>
+				</h3>
+				<ul class="studentsUl" id="studentsUl">
+					<br>
+					<!--
+					<li class="studentsLi">
+						<img  class="studentPhoto" src="uploads/img/logo2.jpg"> 
+						<ul class="studentsUl">
+							<li> name here</li>
+							<li>  phone here</li>
+						</ul>
+					</li> -->
+				</ul>
+			</div>
+			<div id="description"  class="col-md-6 container">
+				<div id="newCourse" class="">
+					<div class="row">
+						<button class="" id="newCourseBtn"> save </button>
+						<h3 class="col-md-offset-1" style="display: inline;"> new course</h3>
+						<label for="courseIdDelete" class="col-md-offset-2"> id</label>
+						<input type="text" id="courseIdDelete" name="courseIdDelete">
+						<button id="courseDeleteBtn"> delete </button> 
+					</div> <br>
+					<div class="row col-md-offset-1">
+						<label for="newCourseName"> course name:</label>
+						<input type="text" id="newCourseName" name="courseName">
+					</div> <br>
+					<div class="row col-md-offset-1">
+						<label for="newCourseDiscription"> description </label>
+						<textarea id="newCourseDiscription"></textarea>
+					</div> <br>
+					<div class="row col-md-offset-1">
+						<label for="newCourseImage"> photo </label>
+						<input type="text" id="newCourseImage" name="newCourseImage">
+					</div>
+					<div class="row col-md-offset-2 note"></div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div id="mainCon"></div>
+	<div id="admin"></div>
+	<div id="student"></div>
+	<div id="editStudent"></div>
+	<div id="course"></div>
+	<div id="courseEdit"></div>
+	<div id="editAdmin"></div>
+</main>
+</body>
+</html>
