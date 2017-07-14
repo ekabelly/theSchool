@@ -18,6 +18,7 @@ $(document).ready(function(){
         $('.studentsLi').click(function(){
           $('#selectedStudentDescription').toggle();
           $('#newCourse').hide();
+          $('#courseDescription').hide();
           $('#newStudent').hide();
           $('#defualtContainer').toggle(display("#selectedStudentDescription"));
         });
@@ -45,6 +46,7 @@ $(document).ready(function(){
           console.log("courseLi click");
           $('#courseDescription').toggle();
           $('#newCourse').hide();
+          $('#selectedStudentDescription').hide();
           $('#newStudent').hide();
           $('#defualtContainer').toggle(display("#courseDescription"));
         });
@@ -57,6 +59,7 @@ $(document).ready(function(){
     console.log('toggle');
     $('#newStudent').hide();
     $('#courseDescription').hide();
+    $('#selectedStudentDescription').hide();
     $('#newCourse').toggle();
     $('#defualtContainer').toggle(display("#newCourse"));
   });
@@ -111,6 +114,7 @@ $(document).ready(function(){
     console.log('toggle');
     $('#newCourse').hide();
     $('#courseDescription').hide();
+    $('#selectedStudentDescription').hide();
     $('#newStudent').toggle();
     $('#defualtContainer').toggle(display("#newStudent"));
   });
