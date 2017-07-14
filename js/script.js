@@ -15,7 +15,12 @@ $(document).ready(function(){
           var phone = user['phone'];
             $('#studentsUl').append("<li class='studentsLi'><img  class='studentPhoto' src="+image+"><ul style='display:inline;' class='studentUl'><li> "+id+" "+name+" <li> "+phone);
         });
-
+        $('.studentsLi').click(function(){
+          $('#selectedStudentDescription').toggle();
+          $('#newCourse').hide();
+          $('#newStudent').hide();
+          $('#defualtContainer').toggle(display("#selectedStudentDescription"));
+        });
       }).fail(function(err){
         console.log(err);
       });
@@ -36,6 +41,13 @@ $(document).ready(function(){
             $('.coursesUl').append("<li class='courseLi'><img  class='coursePhoto' src="+image+"><ul style='display:inline;' class='courseUl'><li> "+id+" "+name);
         });
         $('.welcomeMessege').append(" and "+data.length+" courses");
+        $('.courseLi').click(function(){
+          console.log("courseLi click");
+          $('#courseDescription').toggle();
+          $('#newCourse').hide();
+          $('#newStudent').hide();
+          $('#defualtContainer').toggle(display("#courseDescription"));
+        });
       }).fail(function(err){
         console.log(err);
       });
@@ -44,11 +56,9 @@ $(document).ready(function(){
   $('#coureBtn').click(function(){
     console.log('toggle');
     $('#newStudent').hide();
+    $('#courseDescription').hide();
     $('#newCourse').toggle();
-    if($('#newCourse').css('display') == 'none'){
-      display = true;
-    }else{display = false;}
-    $('#defualtContainer').toggle(display);
+    $('#defualtContainer').toggle(display("#newCourse"));
   });
 
   //-------------------save new course
@@ -100,11 +110,9 @@ $(document).ready(function(){
   $('#studentsBtn').click(function(){
     console.log('toggle');
     $('#newCourse').hide();
+    $('#courseDescription').hide();
     $('#newStudent').toggle();
-    if($('#newStudent').css('display') == 'none'){
-      display = true;
-    }else{display = false;}
-    $('#defualtContainer').toggle(display);
+    $('#defualtContainer').toggle(display("#newStudent"));
   });
 
 //-------------------save new student
@@ -153,5 +161,12 @@ $(document).ready(function(){
       console.log(err);
    });
   });
+
+function display(display){
+  if($(display).css('display') == 'none'){
+      return true;
+    }else{return false;}
+
+}
 
   });
