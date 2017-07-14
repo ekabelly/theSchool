@@ -5,7 +5,7 @@
 	height: 50px;
 	width: 66px;
 }
-#newCourse, #admin, #student, #editStudent, #course, #editCourse, #editAdmin, #userNavDis, #navLinks {
+#newCourse, #newStudent, #admin, #student, #editStudent, #course, #editCourse, #editAdmin, #userNavDis, #navLinks {
 	display: none;
 }
 main {

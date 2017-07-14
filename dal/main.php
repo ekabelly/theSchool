@@ -39,6 +39,31 @@ function deleteCourse($id){
 	return false;
 }
 
+//-------------new student
+
+if (isset($_GET['studentName']) && isset($_GET['email']) && isset($_GET['studentImage'])) {
+	$student = new Student("3, 4, 5", $_GET['studentName'], $_GET['email'], $_GET['studentImage'], "");
+	if (isset($_GET['courses_id'])) {
+		$student = new Student($_GET['courses_id'], $_GET['studentName'], $_GET['email'], $_GET['studentImage']);	
+	}
+	echo json_encode($student->sendToDB());
+}
+
+//------------delete student
+
+if (isset($_GET['deleteStudent'])) {
+	echo json_encode(deleteStudent($_GET['deleteStudent']));
+}
+
+function deleteStudent($id){
+	$sql = "delete from students where id = '$id'";
+	$result = conn($sql);
+	if ($result) {
+		return true;
+	}
+	return false;
+}
+
 // $course = new Courses('bible', '', '1', '');	
 // echo $course->sendToDB();
 ?>

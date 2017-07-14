@@ -16,7 +16,6 @@ class Student {
 		$this->phone = $phone;
 		$this->email = $email;
 		$this->image = $image;
-		$this->sendToDB();
 	}
 
 	public function getStudent(){
@@ -73,15 +72,15 @@ class Student {
 	public function sendToDB(){
 		$name = $this->name;
 		$courses_id = $this->courses_id;
-		$courses_id = implode(", ", $courses_id);
 		$phone = $this->phone;
 		$email = $this->email;
 		$image = $this->image;
 		$sql = "INSERT INTO students(name, phone, email, image, courses_id) VALUES ('$name', '$phone', '$email', '$image', '$courses_id')";
 		$result = conn($sql);
+		Database::close();
 		if ($result) {
-			echo "student created";
-		}else{ echo "there was a problem";}
+			return true;
+		}else{ return false;}
 		Database::close();
 	}
 }

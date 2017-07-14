@@ -18,12 +18,6 @@ $(document).ready(function(){
         console.log(err);
       });
 
-
-//------students main container
-
-
-
-
 //------courses get
 
       $.ajax({
@@ -45,17 +39,18 @@ $(document).ready(function(){
 
   $('#coureBtn').click(function(){
     console.log('toggle');
+    $('#newStudent').hide();
     $('#newCourse').toggle();
   });
 
   //-------------------save new course
 
   $('#newCourseBtn').click(function(){
+    $('.note').empty();
     var name = $('#newCourseName').val();
     var description = $('#newCourseDiscription').val();
     var image = $('#newCourseImage').val();
-    $('.note').empty();
-    if (image == "" || name == "") {
+    if (name == "") {
       console.log("empty input");
       $('.note').append("<br><p> please fill the relevant inputs");
       return "";
@@ -68,6 +63,9 @@ $(document).ready(function(){
       console.log(data);
       if (data) {
       }
+      $('#newCourseName').val('');
+      $('#newCourseDiscription').val('');
+      $('#newCourseImage').val('');
     }).fail(function(err){
       console.log(err);
     });
@@ -81,47 +79,68 @@ $(document).ready(function(){
       url:'dal/main.php?deleteCourse='+id,
       type:'GET',
     }).done(function(data){
-      console.log(data)
+      console.log(data);
+      $('#courseIdDelete').val('');
     }).fail(function(err){
-      console.log(err)
+      console.log(err);
    });
   });
 
-
-//   $('.courseLi').click(function(){
-//     console.log('toggle');
-//     $('#description').append("");
-//   });
-// });
 
 //---------- student main container
 
   $('#studentsBtn').click(function(){
     console.log('toggle');
-    $('.studentsUl').toggle();
+    $('#newCourse').hide();
+    $('#newStudent').toggle();
   });
 
-//-------------------save new course
+//-------------------save new student
 
-  // $('#studentsBtn').click(function(){
-  //   var name = $('#studenteName').val();
-  //   var description = $('#newCourseDiscription').val();
-  //   var image = $('#newCourseImage').val();
-  //   $('.note').empty();
-  //   if (image == "" || name == "") {
-  //     console.log("empty input");
-  //     $('.note').append("<br><p> please fill the relevant inputs");
-  //     return "";
-  //   }
-  //   $.ajax({
-  //     dataType: 'json',
-  //     url:'dal/main.php?courseName='+name+'&description='+description+'&courseImage='+image,
-  //     type: 'GET',
-  //   }).done(function(data){
-  //     console.log(data);
-  //     if (data) {
-  //     }
-  //   }).fail(function(err){
-  //     console.log(err);
-  //   });
-  // });
+  $('#newStudentBtn').click(function(){
+    $('.note').empty();
+    var name = $('#newStudentName').val();
+    var phone = $('#newStudentPhone').val();
+    var email = $('#newstudentEmail').val();
+    var image = $('#newstudentImage').val();
+    console.log(name, email);
+    if (name == "" || email == "") {
+      console.log("empty input");
+      $('.note').append("<br><p> please fill a name & an email");
+      return "";
+    }
+    $.ajax({
+      dataType: 'json',
+      url:'dal/main.php?studentName='+name+'&email='+email+'&phone='+phone+'&studentImage='+image,
+      type: 'GET',
+    }).done(function(data){
+      console.log(data);
+      // if (data) {
+      //   console.log("new student added");
+      // }
+      $('#newStudentName').val('');
+      $('#newStudentPhone').val('');
+      $('#newstudentEmail').val('');
+      $('#newstudentImage').val('');
+    }).fail(function(err){
+      console.log(err);
+    });
+  });
+
+    //------------delete student
+  $('#studentDeleteBtn').click(function(){
+    var id = $('#studentIdDelete').val();
+     $.ajax({
+      dataType: 'json',
+      url:'dal/main.php?deleteStudent='+id,
+      type:'GET',
+    }).done(function(data){
+      console.log(data);
+      $('#studentIdDelete').val('');
+    }).fail(function(err){
+      console.log(err);
+   });
+  });
+
+
+  });
