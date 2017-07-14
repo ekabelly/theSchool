@@ -6,6 +6,7 @@ $(document).ready(function(){
         url:'dal/main.php?students=0',
         type: 'GET',
       }).done(function(data){
+        $('#defualtContainer').append("<h3 class='welcomeMessege'> the school has "+data.length+" students");
         data.forEach(function(user){
           console.log(user);
           var id = user['id'];
@@ -14,6 +15,7 @@ $(document).ready(function(){
           var phone = user['phone'];
             $('#studentsUl').append("<li class='studentsLi'><img  class='studentPhoto' src="+image+"><ul style='display:inline;' class='studentUl'><li> "+id+" "+name+" <li> "+phone);
         });
+
       }).fail(function(err){
         console.log(err);
       });
@@ -25,6 +27,7 @@ $(document).ready(function(){
         url:'dal/main.php?courses=0',
         type: 'GET',
       }).done(function(data){
+        var allCourses = data;
         data.forEach(function(course){
           console.log(course);
           var id = course['course_id'];
@@ -32,6 +35,7 @@ $(document).ready(function(){
           var image = course['photo'];
             $('.coursesUl').append("<li class='courseLi'><img  class='coursePhoto' src="+image+"><ul style='display:inline;' class='courseUl'><li> "+id+" "+name);
         });
+        $('.welcomeMessege').append(" and "+data.length+" courses");
       }).fail(function(err){
         console.log(err);
       });
@@ -41,6 +45,10 @@ $(document).ready(function(){
     console.log('toggle');
     $('#newStudent').hide();
     $('#newCourse').toggle();
+    if($('#newCourse').css('display') == 'none'){
+      display = true;
+    }else{display = false;}
+    $('#defualtContainer').toggle(display);
   });
 
   //-------------------save new course
@@ -93,6 +101,10 @@ $(document).ready(function(){
     console.log('toggle');
     $('#newCourse').hide();
     $('#newStudent').toggle();
+    if($('#newStudent').css('display') == 'none'){
+      display = true;
+    }else{display = false;}
+    $('#defualtContainer').toggle(display);
   });
 
 //-------------------save new student
@@ -141,6 +153,5 @@ $(document).ready(function(){
       console.log(err);
    });
   });
-
 
   });
