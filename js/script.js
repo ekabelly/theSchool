@@ -15,16 +15,20 @@ $(document).ready(function(){
           var phone = user['phone'];
             $('#studentsUl').append("<li class='studentsLi'><img  class='studentPhoto' src="+image+"><ul style='display:inline;' class='studentUl'><li> "+id+" "+name+" <li> "+phone);
         });
-        $('.studentsLi').click(function(){
-          $('#selectedStudentDescription').toggle();
-          $('#newCourse').hide();
-          $('#courseDescription').hide();
-          $('#newStudent').hide();
-          $('#defualtContainer').toggle(display("#selectedStudentDescription"));
-        });
+        $('.studentsLi').click(toggleSelectedStudent);
       }).fail(function(err){
         console.log(err);
       });
+
+//-------------- show student description
+
+function toggleSelectedStudent(){
+          $('#selectedStudentDescription').toggle();
+          $('#newCourse').hide();
+          $('#selectedCourseDescription').hide();
+          $('#newStudent').hide();
+          $('#defualtContainer').toggle(display("#selectedStudentDescription"));
+        }
 
 //------courses get
 
@@ -42,23 +46,27 @@ $(document).ready(function(){
             $('.coursesUl').append("<li class='courseLi'><img  class='coursePhoto' src="+image+"><ul style='display:inline;' class='courseUl'><li> "+id+" "+name);
         });
         $('.welcomeMessege').append(" and "+data.length+" courses");
-        $('.courseLi').click(function(){
-          console.log("courseLi click");
-          $('#courseDescription').toggle();
-          $('#newCourse').hide();
-          $('#selectedStudentDescription').hide();
-          $('#newStudent').hide();
-          $('#defualtContainer').toggle(display("#courseDescription"));
-        });
+        $('.courseLi').click(toggleSelectedCourse);
       }).fail(function(err){
         console.log(err);
       });
+
+      //-------------- show course description
+
+      function toggleSelectedCourse(){
+          console.log("courseLi click");
+          $('#selectedCourseDescription').toggle();
+          $('#newCourse').hide();
+          $('#selectedStudentDescription').hide();
+          $('#newStudent').hide();
+          $('#defualtContainer').toggle(display("#selectedCourseDescription"));
+        }
 //--------------course main container
 
   $('#coureBtn').click(function(){
     console.log('toggle');
     $('#newStudent').hide();
-    $('#courseDescription').hide();
+    $('#selectedCourseDescription').hide();
     $('#selectedStudentDescription').hide();
     $('#newCourse').toggle();
     $('#defualtContainer').toggle(display("#newCourse"));
@@ -113,7 +121,7 @@ $(document).ready(function(){
   $('#studentsBtn').click(function(){
     console.log('toggle');
     $('#newCourse').hide();
-    $('#courseDescription').hide();
+    $('#selectedCourseDescription').hide();
     $('#selectedStudentDescription').hide();
     $('#newStudent').toggle();
     $('#defualtContainer').toggle(display("#newStudent"));
