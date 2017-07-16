@@ -1,4 +1,25 @@
+//---init session
+
+$.ajax({
+    dataType:'json',
+    url:'dal/session.php',
+    type:'POST'
+  }).done(function(data){
+    if (!data) {
+      window.location.href="login.html";
+    }else{console.log("welcome"+data['username']);}
+  }).fail(function(err){
+    console.log(err);
+});
+
 $(document).ready(function(){
+
+  function display(display){
+  if($(display).css('display') == 'none'){
+      return true;
+    }else{return false;}
+
+}
 
   //--------students get
 var allStudents;
@@ -43,6 +64,63 @@ var allCourses;
         console.log(err);
       });
 
+//---------- student main container
+
+  $('#studentsBtn').click(function(){
+    console.log('toggle');
+    $('#newCourse').hide();
+    $('#selectedCourseDescription').hide();
+    $('#selectedStudentDescription').hide();
+    $('#newStudent').toggle();
+    $('#defualtContainer').toggle(display("#newStudent"));
+  });
+
+//-------------------save new student
+
+  $('#newStudentBtn').click(function(){
+    $('.note').empty();
+    var name = $('#newStudentName').val();
+    var phone = $('#newStudentPhone').val();
+    var email = $('#newstudentEmail').val();
+    var image = $('#newstudentImage').val();
+    console.log(name, email);
+    if (name == "" || email == "") {
+      console.log("empty input");
+      $('.note').append("<br><p> please fill a name & an email");
+      return "";
+    }
+    $.ajax({
+      dataType: 'json',
+      url:'dal/main.php?studentName='+name+'&email='+email+'&phone='+phone+'&studentImage='+image,
+      type: 'GET',
+    }).done(function(data){
+      console.log(data);
+      // if (data) {
+      //   console.log("new student added");
+      // }
+      $('#newStudentName').val('');
+      $('#newStudentPhone').val('');
+      $('#newstudentEmail').val('');
+      $('#newstudentImage').val('');
+    }).fail(function(err){
+      console.log(err);
+    });
+  });
+
+    //------------delete student
+  $('#studentDeleteBtn').click(function(){
+    var id = $('#studentIdDelete').val();
+     $.ajax({
+      dataType: 'json',
+      url:'dal/main.php?deleteStudent='+id,
+      type:'GET',
+    }).done(function(data){
+      console.log(data);
+      $('#studentIdDelete').val('');
+    }).fail(function(err){
+      console.log(err);
+   });
+  });
 
 //------courses get
 
@@ -57,15 +135,35 @@ var allCourses;
           var id = course['id'];
           var name = course['name'];
           var image = course['image'];
-            $('.coursesUl').append("<li class='courseLi'><img  class='coursePhoto' src="+image+"><ul style='display:inline;' class='courseUl'><li> "+id+" "+name);
+            $('.coursesUl').append("<li class='courseLi'><img  class='coursePhoto' value="+id+" src="+image+"><ul style='display:inline;' class='courseUl'><li> "+id+" "+name);
         });
         $('.welcomeMessege').append(" and "+data.length+" courses");
-        $('.courseLi').click(toggleSelectedCourse);
+        $('.courseLi').click(function(e){
+          var courseId = $(e.target).parents('.courseLi').val();
+            // console.log($(e.target).parents('.studentsLi').val());
+            // console.log(data);
+            //--------put here web worker!!------
+            $.each(data, function(i, val){
+              // console.log(data[i]['id']);
+              if (courseId == data[i]['id']) {
+                var theCourse = data[i];
+              }
+            });
+           $('#selectedCourseDescription').show();
+          $('#newCourse').hide();
+          $('#selectedCourseDescription').hide();
+          $('#newStudent').hide();
+          $('#defualtContainer').toggle(display("#selectedCourseDescription"));
+          console.log(theCourse['name']);
+          $('.selectedCourseName').html(theCourse['name']);
+          $('.selectedCourseDescription').empty().append("<p>"+theCourse['phone']+"<br><p>"+theCourse['email']);
+          $('.selectedCoursePhoto').attr('src', theCourse['image']);
+        });
       }).fail(function(err){
         console.log(err);
       });
 
-      //-------------- show course description
+//-------------- show course description
 
       function toggleSelectedCourse(e){
           console.log("courseLi click");
@@ -129,70 +227,4 @@ var allCourses;
    });
   });
 
-
-//---------- student main container
-
-  $('#studentsBtn').click(function(){
-    console.log('toggle');
-    $('#newCourse').hide();
-    $('#selectedCourseDescription').hide();
-    $('#selectedStudentDescription').hide();
-    $('#newStudent').toggle();
-    $('#defualtContainer').toggle(display("#newStudent"));
-  });
-
-//-------------------save new student
-
-  $('#newStudentBtn').click(function(){
-    $('.note').empty();
-    var name = $('#newStudentName').val();
-    var phone = $('#newStudentPhone').val();
-    var email = $('#newstudentEmail').val();
-    var image = $('#newstudentImage').val();
-    console.log(name, email);
-    if (name == "" || email == "") {
-      console.log("empty input");
-      $('.note').append("<br><p> please fill a name & an email");
-      return "";
-    }
-    $.ajax({
-      dataType: 'json',
-      url:'dal/main.php?studentName='+name+'&email='+email+'&phone='+phone+'&studentImage='+image,
-      type: 'GET',
-    }).done(function(data){
-      console.log(data);
-      // if (data) {
-      //   console.log("new student added");
-      // }
-      $('#newStudentName').val('');
-      $('#newStudentPhone').val('');
-      $('#newstudentEmail').val('');
-      $('#newstudentImage').val('');
-    }).fail(function(err){
-      console.log(err);
-    });
-  });
-
-    //------------delete student
-  $('#studentDeleteBtn').click(function(){
-    var id = $('#studentIdDelete').val();
-     $.ajax({
-      dataType: 'json',
-      url:'dal/main.php?deleteStudent='+id,
-      type:'GET',
-    }).done(function(data){
-      console.log(data);
-      $('#studentIdDelete').val('');
-    }).fail(function(err){
-      console.log(err);
-   });
-  });
-
-function display(display){
-  if($(display).css('display') == 'none'){
-      return true;
-    }else{return false;}
-
-}
-
-  });
+});

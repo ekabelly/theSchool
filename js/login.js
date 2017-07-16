@@ -1,10 +1,10 @@
 $(document).ready(function(){
 	$('#btn1').click(function(){
-		$('#inputsEmpty').hide();
-		$('#btn1').addClass('col-md-offset-2');
+		// $('#inputsEmpty').hide();
+		// $('#btn1').addClass('col-md-offset-2');
 		if ($('#username').val() == '' || $('#pass').val() == '') {
-			$('#btn1').removeClass('col-md-offset-2');
-			$('#inputsEmpty').show();
+			// $('#btn1').removeClass('col-md-offset-2');
+			$('#inputsEmpty').html("empty inputs");
 			return console.log('login empty');
 		}
 		console.log($('#username').val()+" "+$('#pass').val());
@@ -20,7 +20,7 @@ $(document).ready(function(){
 			if (data) {
 				window.location.href="index.html";
 			}else{
-				console.log('wrong inputs');
+				$('#inputsEmpty').html("wrong inputs");
 			}
 		}).fail(function(err){
       console.log(err);
