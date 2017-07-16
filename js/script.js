@@ -14,8 +14,8 @@ $.ajax({
 
 $(document).ready(function(){
 
-  function display(display){
-  if($(display).css('display') == 'none'){
+  function display(someHtmlObj){
+  if($(someHtmlObj).css('display') == 'none'){
       return true;
     }else{return false;}
 
@@ -140,23 +140,23 @@ var allCourses;
         $('.welcomeMessege').append(" and "+data.length+" courses");
         $('.courseLi').click(function(e){
           var courseId = $(e.target).parents('.courseLi').val();
-            // console.log($(e.target).parents('.studentsLi').val());
-            // console.log(data);
+            console.log($(e.target).parents('.courseLi').val());
+            console.log(data);
             //--------put here web worker!!------
             $.each(data, function(i, val){
-              // console.log(data[i]['id']);
+              console.log(data[i]['id']);
               if (courseId == data[i]['id']) {
                 var theCourse = data[i];
               }
             });
            $('#selectedCourseDescription').show();
           $('#newCourse').hide();
-          $('#selectedCourseDescription').hide();
+          $('#selectedStudentDescription').hide();
           $('#newStudent').hide();
           $('#defualtContainer').toggle(display("#selectedCourseDescription"));
           console.log(theCourse['name']);
           $('.selectedCourseName').html(theCourse['name']);
-          $('.selectedCourseDescription').empty().append("<p>"+theCourse['phone']+"<br><p>"+theCourse['email']);
+          $('.selectedCourseDescription').empty().append("<p>"+theCourse['description']);
           $('.selectedCoursePhoto').attr('src', theCourse['image']);
         });
       }).fail(function(err){
