@@ -6,7 +6,7 @@
 	width: 66px;
 }
 
-.selectedStudentPhoto{
+.selectedStudentPhoto, .selectedCoursePhoto{
 	height: 138px;
 }
 

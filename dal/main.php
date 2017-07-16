@@ -15,7 +15,7 @@ if (isset($_GET['courses'])) {
 
 
 //----------new course
-if (isset($_GET['courseName']) && isset($_GET['description']) && isset($_GET['courseImage'])) {
+if (isset($_GET['courseName'])) {
 	$course = new Courses($_GET['courseName'], $_GET['description'], $_GET['courseImage'], "");
 	if (isset($_GET['students_id'])) {
 		$students_id = $_GET['students_id'];
@@ -31,7 +31,7 @@ if (isset($_GET['deleteCourse'])) {
 }
 
 function deleteCourse($id){
-	$sql = "delete from course where course_id = '$id'";
+	$sql = "delete from course where id = '$id'";
 	$result = conn($sql);
 	if ($result) {
 		return true;
@@ -42,9 +42,9 @@ function deleteCourse($id){
 //-------------new student
 
 if (isset($_GET['studentName']) && isset($_GET['email'])) {
-	$student = new Student("3, 4, 5", $_GET['studentName'], $_GET['email'], $_GET['studentImage'], "");
+	$student = new Student($_GET['studentName'], $_GET['phone'], $_GET['email'], $_GET['studentImage'], "");
 	if (isset($_GET['courses_id'])) {
-		$student = new Student($_GET['courses_id'], $_GET['studentName'], $_GET['email'], $_GET['studentImage']);	
+		$student = new Student($_GET['studentName'], $_GET['phone'], $_GET['email'], $_GET['studentImage'], $_GET['courses_id']);	
 	}
 	echo json_encode($student->sendToDB());
 }

@@ -23,8 +23,9 @@ class Courses {
 		// $students_id = implode(", ", $students_id);
 		$description = $this->description;
 		$photo = $this->image;
-		$sql = "INSERT INTO course(name, description, photo, students_id) VALUES ('$name', '$description', '$photo', '1')";
+		$sql = "INSERT INTO course(name, description, image, students_id) VALUES ('$name', '$description', '$photo', 'ido')";
 		$result = conn($sql);
+		Database::close();
 		if ($result) {
 			return true;
 		}else{ return false;}

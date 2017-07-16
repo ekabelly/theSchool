@@ -59,6 +59,11 @@ var allCourses;
           $('.selectedStudentName').html(theStudent['name']);
           $('.selectedstudentDescription').empty().append("<p>"+theStudent['phone']+"<br><p>"+theStudent['email']);
           $('.selectedStudentPhoto').attr('src', theStudent['image']);
+          var courses = theStudent['courses_id'].split(", ");
+          $('.selectedStudentCoursesUl').empty();
+          $.each(courses, function(i, val){
+            $('.selectedStudentCoursesUl').append("<li>"+val);
+          }); 
         });
       }).fail(function(err){
         console.log(err);
@@ -81,8 +86,8 @@ var allCourses;
     $('.note').empty();
     var name = $('#newStudentName').val();
     var phone = $('#newStudentPhone').val();
-    var email = $('#newstudentEmail').val();
-    var image = $('#newstudentImage').val();
+    var email = $('#newStudentEmail').val();
+    var image = $('#newStudentImage').val();
     console.log(name, email);
     if (name == "" || email == "") {
       console.log("empty input");
@@ -100,8 +105,8 @@ var allCourses;
       // }
       $('#newStudentName').val('');
       $('#newStudentPhone').val('');
-      $('#newstudentEmail').val('');
-      $('#newstudentImage').val('');
+      $('#newStudentEmail').val('');
+      $('#newStudentImage').val('');
     }).fail(function(err){
       console.log(err);
     });
@@ -135,18 +140,18 @@ var allCourses;
           var id = course['id'];
           var name = course['name'];
           var image = course['image'];
-            $('.coursesUl').append("<li class='courseLi'><img  class='coursePhoto' value="+id+" src="+image+"><ul style='display:inline;' class='courseUl'><li> "+id+" "+name);
+            $('.coursesUl').append("<li class='courseLi' value="+id+"><img  class='coursePhoto' src="+image+"><ul style='display:inline;' class='courseUl'><li> "+id+" "+name);
         });
         $('.welcomeMessege').append(" and "+data.length+" courses");
         $('.courseLi').click(function(e){
           var courseId = $(e.target).parents('.courseLi').val();
-            console.log($(e.target).parents('.courseLi').val());
-            console.log(data);
+            console.log(courseId);
+            // console.log(data);
             //--------put here web worker!!------
             $.each(data, function(i, val){
-              console.log(data[i]['id']);
+              // console.log(data[i]['id']);
               if (courseId == data[i]['id']) {
-                var theCourse = data[i];
+                theCourse = data[i];
               }
             });
            $('#selectedCourseDescription').show();
@@ -158,6 +163,11 @@ var allCourses;
           $('.selectedCourseName').html(theCourse['name']);
           $('.selectedCourseDescription').empty().append("<p>"+theCourse['description']);
           $('.selectedCoursePhoto').attr('src', theCourse['image']);
+          var students = theCourse['students_id'].split(", ");
+          $('.selectedCourseStudentsUl').empty();
+          $.each(students, function(i, val){
+            $('.selectedCourseStudentsUl').append("<li>"+val);
+          });
         });
       }).fail(function(err){
         console.log(err);
@@ -202,8 +212,6 @@ var allCourses;
       type: 'GET',
     }).done(function(data){
       console.log(data);
-      if (data) {
-      }
       $('#newCourseName').val('');
       $('#newCourseDiscription').val('');
       $('#newCourseImage').val('');

@@ -10,7 +10,7 @@ class Student {
 	private $courses_id;
 	static $student;
 
-	public function __construct($courses_id, $name, $phone, $email, $image){
+	public function __construct($name, $phone, $email, $image, $courses_id){
 		$this->courses_id = $courses_id;
 		$this->name = $name;
 		$this->phone = $phone;
