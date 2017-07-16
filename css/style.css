@@ -5,6 +5,11 @@
 	height: 50px;
 	width: 66px;
 }
+
+.selectedStudentPhoto{
+	border: black solid 3px;
+}
+
 #selectedCourseDescription, #selectedStudentDescription, #newCourse, #newStudent, #admin, #student, #editStudent, #course, #editCourse, #editAdmin, #userNavDis, #navLinks {
 	display: none;
 }
@@ -35,4 +40,8 @@ main {
 }
 h3 {
 	margin-left: 40px;
+}
+
+#inputsEmpty{
+	display: none;
 }

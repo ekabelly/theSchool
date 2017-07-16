@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>the school</title>
+	<link href="css/style.css" rel="stylesheet">
+	<link rel="stylesheet" href="css/bootstrap.css">
+	<script src="js/jquery-3.2.1.js"></script>
+	<script src="js/login.js"></script>
+	<script src="js/bootstrap.js"></script>
+</head>
+<body>
+<header class="page-header row">
+<nav class="navbar navbar-default navbar-fixed-top">
+  <div class="container-fluid">
+    <div class="navbar-header">
+        <img alt="Brand" src="uploads/img/logo2.jpg" id="logo">
+    </div>
+    <ul class="nav navbar-nav" id="navLinks">
+    		<li id="schoolLink"><a href="#"> school</a></li>
+    		<li id="adminLink"> <a href="#"> admin</a></li>
+    	</ul>
+        <p class="navbar-text navbar-right" id="userNavDis">Signed in as <a href="#" class="navbar-link">Mark Otto</a></p>
+  </div>
+</nav>
+</header>
+<main class="container">
+	<div id="login" class="col-md-offset-4">
+		<label for="username"> username: </label>
+		<input type="text" id="username" name="username" placeholder="username"> <br>
+		<label for="pass"> password: </label>
+		<input type="text" id="pass" name="pass" placeholder="password"><br>
+		<p id="inputsEmpty" class="col-md-2"> inputs are empty </p>
+		<button id="btn1" class="col-md-offset-2 col-md-2"> login</button>
+	</div>
+</main>
+</body>
+</html>

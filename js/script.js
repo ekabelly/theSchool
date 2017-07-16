@@ -1,6 +1,9 @@
 $(document).ready(function(){
 
   //--------students get
+var allStudents;
+var allCourses;
+
    $.ajax({
         dataType:'json',
         url:'dal/main.php?students=0',
@@ -13,22 +16,33 @@ $(document).ready(function(){
           var name = user['name'];
           var image = user['image'];
           var phone = user['phone'];
-            $('#studentsUl').append("<li class='studentsLi'><img  class='studentPhoto' src="+image+"><ul style='display:inline;' class='studentUl'><li> "+id+" "+name+" <li> "+phone);
+            $('#studentsUl').append("<li class='studentsLi' value="+id+"><img  class='studentPhoto' src="+image+"><ul style='display:inline;' class='studentUl'><li> "+id+" "+name+" <li> "+phone);
         });
-        $('.studentsLi').click(toggleSelectedStudent);
-      }).fail(function(err){
-        console.log(err);
-      });
-
-//-------------- show student description
-
-function toggleSelectedStudent(){
-          $('#selectedStudentDescription').toggle();
+        $('.studentsLi').click(function(e){
+          var studentId = $(e.target).parents('.studentsLi').val();
+            // console.log($(e.target).parents('.studentsLi').val());
+            // console.log(data);
+            //--------put here web worker!!------
+            $.each(data, function(i, val){
+              // console.log(data[i]['id']);
+              if (studentId == data[i]['id']) {
+                theStudent = data[i];
+              }
+            });
+           $('#selectedStudentDescription').show();
           $('#newCourse').hide();
           $('#selectedCourseDescription').hide();
           $('#newStudent').hide();
           $('#defualtContainer').toggle(display("#selectedStudentDescription"));
-        }
+          console.log(theStudent['name']);
+          $('.selectedStudentName').html(theStudent['name']);
+          $('.selectedstudentDescription').empty().append("<p>"+theStudent['phone']+"<br><p>"+theStudent['email']);
+          $('.selectedStudentPhoto').attr('src', theStudent['image']);
+        });
+      }).fail(function(err){
+        console.log(err);
+      });
+
 
 //------courses get
 
@@ -40,9 +54,9 @@ function toggleSelectedStudent(){
         var allCourses = data;
         data.forEach(function(course){
           console.log(course);
-          var id = course['course_id'];
+          var id = course['id'];
           var name = course['name'];
-          var image = course['photo'];
+          var image = course['image'];
             $('.coursesUl').append("<li class='courseLi'><img  class='coursePhoto' src="+image+"><ul style='display:inline;' class='courseUl'><li> "+id+" "+name);
         });
         $('.welcomeMessege').append(" and "+data.length+" courses");
@@ -53,7 +67,7 @@ function toggleSelectedStudent(){
 
       //-------------- show course description
 
-      function toggleSelectedCourse(){
+      function toggleSelectedCourse(e){
           console.log("courseLi click");
           $('#selectedCourseDescription').toggle();
           $('#newCourse').hide();

@@ -41,7 +41,7 @@ function deleteCourse($id){
 
 //-------------new student
 
-if (isset($_GET['studentName']) && isset($_GET['email']) && isset($_GET['studentImage'])) {
+if (isset($_GET['studentName']) && isset($_GET['email'])) {
 	$student = new Student("3, 4, 5", $_GET['studentName'], $_GET['email'], $_GET['studentImage'], "");
 	if (isset($_GET['courses_id'])) {
 		$student = new Student($_GET['courses_id'], $_GET['studentName'], $_GET['email'], $_GET['studentImage']);	
