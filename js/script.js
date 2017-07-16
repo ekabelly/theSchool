@@ -73,6 +73,7 @@ var allCourses;
 
   $('#studentsBtn').click(function(){
     console.log('toggle');
+    $('.note').empty();
     $('#newCourse').hide();
     $('#selectedCourseDescription').hide();
     $('#selectedStudentDescription').hide();
@@ -115,6 +116,8 @@ var allCourses;
     //------------delete student
   $('#studentDeleteBtn').click(function(){
     var id = $('#studentIdDelete').val();
+    if (!id) {console.log("please fill in an id");
+    return;}
      $.ajax({
       dataType: 'json',
       url:'dal/main.php?deleteStudent='+id,
@@ -187,6 +190,7 @@ var allCourses;
 
   $('#coureBtn').click(function(){
     console.log('toggle');
+    $('.note').empty();
     $('#newStudent').hide();
     $('#selectedCourseDescription').hide();
     $('#selectedStudentDescription').hide();
@@ -223,6 +227,8 @@ var allCourses;
   //------------delete course
   $('#courseDeleteBtn').click(function(){
     var id = $('#courseIdDelete').val();
+    if (!id) {console.log("please fill in an id");
+    return;}
      $.ajax({
       dataType: 'json',
       url:'dal/main.php?deleteCourse='+id,
