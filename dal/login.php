@@ -11,7 +11,7 @@ if (isset($_POST['username']) && isset($_POST['pass'])) {
 	if (sizeof($row) > 0) {
 		$_SESSION['pass'] = $pass;
 		$_SESSION['username'] = $username;
-		echo json_encode(true);
+		echo json_encode($username);
 	}else{
 		echo json_encode(false);
 	}

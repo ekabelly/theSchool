@@ -14,14 +14,28 @@ if (isset($_GET['courses'])) {
 }
 
 
-//----------new course
+//----------new course & edit course
 if (isset($_GET['courseName'])) {
-	$course = new Courses($_GET['courseName'], $_GET['description'], $_GET['courseImage'], "");
-	if (isset($_GET['students_id'])) {
-		$students_id = $_GET['students_id'];
-		$course = new Courses($_GET['courseName'], $_GET['description'], $_GET['courseImage'], $_GET['students_id']);	
+	if (!isset($_GET['id'])) {
+		$course = new Courses($_GET['courseName'], $_GET['description'], $_GET['courseImage'], "");
+		echo json_encode($course->sendToDB());
+	}else{
+		echo json_encode(updateCourse());
+	}	
+}
+
+//---------update course
+function updateCourse(){
+	$id = $_GET['id'];
+	$name = $_GET['courseName'];
+	$description = $_GET['description'];
+	$image = $_GET['courseImage'];
+	$sql = "UPDATE course SET id='$id',name='$name',description='$description',image='$image' WHERE id='$id'";
+	$result = conn($sql);
+	if ($result) {
+		return true;
 	}
-	echo json_encode($course->sendToDB());
+	return false;
 }
 
 //------------delete course

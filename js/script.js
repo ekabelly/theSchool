@@ -9,7 +9,7 @@ $.ajax({
       window.location.href="login.html";
     }else{
       $('body').show();
-      console.log("welcome"+data['username']);
+      console.log("welcome "+data);
     }
   }).fail(function(err){
     console.log(err);
@@ -35,7 +35,7 @@ var allCourses;
       }).done(function(data){
         $('#defualtContainer').append("<h3 class='welcomeMessege'> the school has "+data.length+" students");
         data.forEach(function(user){
-          console.log(user);
+          // console.log(user);
           var id = user['id'];
           var name = user['name'];
           var image = user['image'];
@@ -46,7 +46,6 @@ var allCourses;
           var studentId = $(e.target).parents('.studentsLi').val();
             // console.log($(e.target).parents('.studentsLi').val());
             // console.log(data);
-            //--------put here web worker!!------
             $.each(data, function(i, val){
               // console.log(data[i]['id']);
               if (studentId == data[i]['id']) {
@@ -75,6 +74,10 @@ var allCourses;
 //---------- student main container
 
   $('#studentsBtn').click(function(){
+    showNewStudentPage();
+  });
+
+  function showNewStudentPage(){
     console.log('toggle');
     $('.note').empty();
     $('#newCourse').hide();
@@ -82,7 +85,7 @@ var allCourses;
     $('#selectedStudentDescription').hide();
     $('#newStudent').toggle();
     $('#defualtContainer').toggle(display("#newStudent"));
-  });
+  }
 
 //-------------------save new student
 
@@ -99,7 +102,7 @@ var allCourses;
     if (name == "" || email == "") {
       console.log("empty input");
       $('.note').append("<br><p> please fill a name & an email");
-      return "";
+      return ;
     }
     $.ajax({
       dataType: 'json',
@@ -156,7 +159,7 @@ function coursesCheckboxes(){
       }).done(function(data){
         var allCourses = data;
         data.forEach(function(course){
-          console.log(course);
+          // console.log(course);
           var id = course['id'];
           var name = course['name'];
           var image = course['image'];
@@ -174,6 +177,18 @@ function coursesCheckboxes(){
                 theCourse = data[i];
               }
             });
+            //-----------------edit course
+
+            $('.selectedCourseEdit').click(function(){
+              $('.deleteCourseSpan').show();
+              $('#editCourseBtn').show();
+              $('#newCourseBtn').hide();
+              showNewCourseContainer();
+              updateCourseInputs(theCourse);
+              // $('.selectedCourseStudentsP').empty();
+              // $('.selectedCourseStudentsP').append("<p> there are "+students.length+" students attending this course");
+            });
+
            $('#selectedCourseDescription').show();
           $('#newCourse').hide();
           $('#selectedStudentDescription').hide();
@@ -206,54 +221,94 @@ function appendCourses(courses){
 
 //-------------- show course description
 
-      function toggleSelectedCourse(e){
-          console.log("courseLi click");
-          $('#selectedCourseDescription').toggle();
-          $('#newCourse').hide();
-          $('#selectedStudentDescription').hide();
-          $('#newStudent').hide();
-          $('#defualtContainer').toggle(display("#selectedCourseDescription"));
-        }
+//       function toggleSelectedCourse(e){
+//           console.log("courseLi click");
+//           $('#selectedCourseDescription').toggle();
+//           $('#newCourse').hide();
+//           $('#selectedStudentDescription').hide();
+//           $('#newStudent').hide();
+//           $('#defualtContainer').toggle(display("#selectedCourseDescription"));
+//         }
 //--------------course main container
 
   $('#coureBtn').click(function(){
+    $('.deleteCourseSpan').hide();
+    $('#editCourseBtn').hide();
+    $('.welcomeMessege').hide();
+    $('#newCourseBtn').show();
+    updateCourseInputs('');
+    showNewCourseContainer();
+  });
+
+  function showNewCourseContainer(){
     console.log('toggle');
     $('.note').empty();
     $('#newStudent').hide();
     $('#selectedCourseDescription').hide();
     $('#selectedStudentDescription').hide();
-    $('#newCourse').toggle();
-    $('#defualtContainer').toggle(display("#newCourse"));
-  });
+    $('#newCourse').show();
+  }
+
 
   //-------------------save new course
 
   $('#newCourseBtn').click(function(){
+      makeNewCourse();
+  });
+
+  $('#editCourseBtn').click(function(){
+    makeNewCourse();
+  });
+
+  function updateCourseInputs(course){
+    if (course == '') {
+      var name = '';
+      var description = '';
+      var image = '';
+    }else{
+      var id = course['id'];
+      var name = course['name'];
+      var description = course['description'];
+      var image = course['image'];
+      $('#courseIdDelete').val(id);
+    }
+    $('#newCourseName').val(name);
+    $('#newCourseDiscription').val(description);
+    $('#newCourseImage').val(image);
+  }
+
+  function makeNewCourse(){
     $('.note').empty();
     var name = $('#newCourseName').val();
     var description = $('#newCourseDiscription').val();
     var image = $('#newCourseImage').val();
+    var url = 'dal/main.php?courseName='+name+'&description='+description+'&courseImage='+image;
+    if(display($('#courseIdDelete'))){
+      var id =$('#courseIdDelete').val();
+      url = 'dal/main.php?id='+id+'&courseName='+name+'&description='+description+'&courseImage='+image;
+    }
     if (name == "") {
       console.log("empty input");
       $('.note').append("<br><p> please fill the relevant inputs");
-      return "";
+      return;
     }
     $.ajax({
       dataType: 'json',
-      url:'dal/main.php?courseName='+name+'&description='+description+'&courseImage='+image,
+      url: url,
       type: 'GET',
     }).done(function(data){
       console.log(data);
-      $('#newCourseName').val('');
-      $('#newCourseDiscription').val('');
-      $('#newCourseImage').val('');
+      updateCourseInputs('');
     }).fail(function(err){
       console.log(err);
     });
-  });
+  }
 
   //------------delete course
   $('#courseDeleteBtn').click(function(){
+    if (!confirm("are you sure you want to dele this course?")) {
+      return;
+    }
     var id = $('#courseIdDelete').val();
     if (!id) {console.log("please fill in an id");
     return;}

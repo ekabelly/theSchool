@@ -52,10 +52,13 @@
 				<div id="newCourse" class="">
 					<div class="row">
 						<button class="" id="newCourseBtn"> save </button>
+						<button class="" id="editCourseBtn" style="display: none;"> save </button>
 						<h3 class="col-md-offset-1" style="display: inline;"> new course</h3>
-						<label for="courseIdDelete" class="col-md-offset-2"> id</label>
-						<input type="text" id="courseIdDelete" name="courseIdDelete">
-						<button id="courseDeleteBtn"> delete </button> 
+						<span class="deleteCourseSpan" style="display: none;">
+							<label for="courseIdDelete" class="col-md-offset-2"> id</label>
+							<input type="text" id="courseIdDelete" name="courseIdDelete">
+							<button id="courseDeleteBtn"> delete </button> 
+						</span>
 					</div> <br>
 					<div class="row col-md-offset-1">
 						<label for="newCourseName"> course name:</label>
@@ -75,9 +78,11 @@
 					<div class="row">
 						<button class="" id="newStudentBtn"> save </button>
 							<h3 class="col-md-offset-1" style="display: inline;"> new student</h3>
-							<label for="studentIdDelete" class="col-md-offset-2"> id</label>
-							<input type="text" id="studentIdDelete" name="studentIdDelete">
-							<button id="studentDeleteBtn"> delete </button> 
+							<span class="deleteStudentSpan" style="display: none;">
+								<label for="studentIdDelete" class="col-md-offset-2"> id</label>
+								<input type="text" id="studentIdDelete" name="studentIdDelete">
+								<button id="studentDeleteBtn"> delete </button> 
+							</span>
 						</div> <br>
 						<div class="row col-md-offset-1">
 							<label for="newStudentName"> Student name:</label>
@@ -95,16 +100,17 @@
 							<label for="newStudentImage"> photo </label>
 							<input type="text" id="newStudentImage" name="newStudentImage">
 						</div><br>
-						<div class="coursesCheckbox col-md-offset-1">
-						</div>
+					<div class="coursesCheckbox col-md-offset-1">
 					</div>
+				</div>
 				<div id="defualtContainer" class="row">
 				</div>
 				<div id="selectedCourseDescription">
 					<br>
 					<img  class='selectedCoursePhoto col-md-4' src="">
-					<h3 class="selectedCourseName col-md-7">selected course</h3>
-					<p class="selectedCourseDescription col-md-7">course description course description course description course description course description course description course description course description course description course description course description course description course description course description course description course description course description course description course description</p>
+					<h3 class="selectedCourseName col-md-6">selected course</h3>
+					<button class="selectedCourseEdit">edit</button>
+					<p class="selectedCourseDescription col-md-7"></p>
 					<ul class="selectedCourseStudentsUl col-md-12">
 						
 					</ul>
@@ -112,7 +118,8 @@
 				<div id="selectedStudentDescription">
 				<br>
 					<img  class='selectedStudentPhoto col-md-4' src="">
-					<h3 class="selectedStudentName col-md-7">selected student</h3>
+					<h3 class="selectedStudentName col-md-6">selected student</h3>
+					<button class="selectedCourseEdit">edit</button>
 					<span class="selectedstudentDescription col-md-7">student description student description student description student description student description student description student description student description student description student description student description student description student description student description student description student description student description student description student description</span>
 					<ul class="selectedStudentCoursesUl col-md-12">
 						
@@ -121,13 +128,6 @@
 			</div>
 		</div>
 	</div>
-	<div id="mainCon"></div>
-	<div id="admin"></div>
-	<div id="student"></div>
-	<div id="editStudent"></div>
-	<div id="course"></div>
-	<div id="courseEdit"></div>
-	<div id="editAdmin"></div>
 </main>
 </body>
 </html>
