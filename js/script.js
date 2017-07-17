@@ -189,9 +189,20 @@ function coursesCheckboxes(){
             $('.selectedCourseStudentsUl').append("<li>"+val);
           });
         });
+
+        appendCourses(data);
+
       }).fail(function(err){
         console.log(err);
       });
+
+//---------------append courses to new student form
+
+function appendCourses(courses){
+  $.each(courses, function(i, val){
+    $('.coursesCheckbox').append("<label class='checkbox-inline'><input type='checkbox' value="+val['name']+" >"+val['name']+"</label>");
+  });
+}
 
 //-------------- show course description
 
