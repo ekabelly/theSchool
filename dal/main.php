@@ -42,9 +42,10 @@ function deleteCourse($id){
 //-------------new student
 
 if (isset($_GET['studentName']) && isset($_GET['email'])) {
-	$student = new Student($_GET['studentName'], $_GET['phone'], $_GET['email'], $_GET['studentImage'], "");
 	if (isset($_GET['courses_id'])) {
 		$student = new Student($_GET['studentName'], $_GET['phone'], $_GET['email'], $_GET['studentImage'], $_GET['courses_id']);	
+	}else{
+		$student = new Student($_GET['studentName'], $_GET['phone'], $_GET['email'], $_GET['studentImage'], "");
 	}
 	echo json_encode($student->sendToDB());
 }

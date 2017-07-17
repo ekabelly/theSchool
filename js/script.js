@@ -7,7 +7,10 @@ $.ajax({
   }).done(function(data){
     if (!data) {
       window.location.href="login.html";
-    }else{console.log("welcome"+data['username']);}
+    }else{
+      $('body').show();
+      console.log("welcome"+data['username']);
+    }
   }).fail(function(err){
     console.log(err);
 });
@@ -59,7 +62,7 @@ var allCourses;
           $('.selectedStudentName').html(theStudent['name']);
           $('.selectedstudentDescription').empty().append("<p>"+theStudent['phone']+"<br><p>"+theStudent['email']);
           $('.selectedStudentPhoto').attr('src', theStudent['image']);
-          var courses = theStudent['courses_id'].split(", ");
+          var courses = theStudent['courses_id'].split(",");
           $('.selectedStudentCoursesUl').empty();
           $.each(courses, function(i, val){
             $('.selectedStudentCoursesUl').append("<li>"+val);
@@ -89,7 +92,10 @@ var allCourses;
     var phone = $('#newStudentPhone').val();
     var email = $('#newStudentEmail').val();
     var image = $('#newStudentImage').val();
-    console.log(name, email);
+    var courses = coursesCheckboxes();
+    courses = courses.toString();
+    console.log(courses);
+    // console.log(name, email);
     if (name == "" || email == "") {
       console.log("empty input");
       $('.note').append("<br><p> please fill a name & an email");
@@ -97,10 +103,10 @@ var allCourses;
     }
     $.ajax({
       dataType: 'json',
-      url:'dal/main.php?studentName='+name+'&email='+email+'&phone='+phone+'&studentImage='+image,
+      url:'dal/main.php?studentName='+name+'&email='+email+'&phone='+phone+'&studentImage='+image+'&courses_id='+courses,
       type: 'GET',
     }).done(function(data){
-      console.log(data);
+      // console.log(data);
       // if (data) {
       //   console.log("new student added");
       // }
@@ -112,6 +118,17 @@ var allCourses;
       console.log(err);
     });
   });
+
+function coursesCheckboxes(){
+  var courses = [];
+  $.each($('input[type=checkbox]'), function(i, val){
+    if ($(this).prop("checked")) {
+      console.log("checked "+$(this).val());
+      courses.push($(this).val());
+    }
+  });
+  return courses;
+}
 
     //------------delete student
   $('#studentDeleteBtn').click(function(){
