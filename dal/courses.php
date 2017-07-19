@@ -23,7 +23,7 @@ class Courses {
 		// $students_id = implode(", ", $students_id);
 		$description = $this->description;
 		$photo = $this->image;
-		$sql = "INSERT INTO course(name, description, image, students_id) VALUES ('$name', '$description', '$photo', 'ido')";
+		$sql = "INSERT INTO course(name, description, image, students_id) VALUES ('$name', '$description', '$photo', '')";
 		$result = conn($sql);
 		Database::close();
 		if ($result) {

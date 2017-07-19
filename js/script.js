@@ -166,47 +166,63 @@ function coursesCheckboxes(){
             $('.coursesUl').append("<li class='courseLi' value="+id+"><img  class='coursePhoto' src="+image+"><ul style='display:inline;' class='courseUl'><li> "+id+" "+name);
         });
         $('.welcomeMessege').append(" and "+data.length+" courses");
+        
+//------------click on courseLi
+
         $('.courseLi').click(function(e){
           var courseId = $(e.target).parents('.courseLi').val();
             console.log(courseId);
-            // console.log(data);
-            //--------put here web worker!!------
             $.each(data, function(i, val){
-              // console.log(data[i]['id']);
               if (courseId == data[i]['id']) {
                 theCourse = data[i];
               }
             });
+            
+          //----------show selected course
+          var studentsArr = showSelectedCourse(theCourse);
+          function showSelectedCourse(theCourse){
+            $('#selectedCourseDescription').show();
+            $('#newCourse').hide();
+            $('#selectedStudentDescription').hide();
+            $('#newStudent').hide();
+            $('#defualtContainer').toggle(display("#selectedCourseDescription"));
+            console.log(theCourse['name']);
+            $('.selectedCourseName').html(theCourse['name']);
+            $('.selectedCourseDescription').empty().append("<p>"+theCourse['description']);
+            $('.selectedCoursePhoto').attr('src', theCourse['image']);
+            var studentsArr = theCourse['students_id'].split(",");
+            $('.selectedCourseStudentsUl').empty();
+            if (studentsCount(studentsArr) > 0) {
+              $.each(studentsArr, function(i, val){
+                $('.selectedCourseStudentsUl').append("<li>"+val);
+              });
+            } return studentsArr;
+          }
+           
             //-----------------edit course
 
             $('.selectedCourseEdit').click(function(){
-              $('.deleteCourseSpan').show();
+              selectedCourseEdit(theCourse, studentsArr);
+            });
+
+            function selectedCourseEdit(theCourse, studentsArr){
+              $('.deleteCourseSpan').hide();
+              if (studentsCount(studentsArr) == 0) {$('.deleteCourseSpan').show();}
               $('#editCourseBtn').show();
               $('#newCourseBtn').hide();
               showNewCourseContainer();
               updateCourseInputs(theCourse);
-              // $('.selectedCourseStudentsP').empty();
-              // $('.selectedCourseStudentsP').append("<p> there are "+students.length+" students attending this course");
-            });
+              $('.selectedCourseStudentsP').empty();
+              $('.selectedCourseStudentsP').append("<p> there are "+studentsCount(studentsArr)+" students attending this course");
+            }
 
-           $('#selectedCourseDescription').show();
-          $('#newCourse').hide();
-          $('#selectedStudentDescription').hide();
-          $('#newStudent').hide();
-          $('#defualtContainer').toggle(display("#selectedCourseDescription"));
-          console.log(theCourse['name']);
-          $('.selectedCourseName').html(theCourse['name']);
-          $('.selectedCourseDescription').empty().append("<p>"+theCourse['description']);
-          $('.selectedCoursePhoto').attr('src', theCourse['image']);
-          var students = theCourse['students_id'].split(", ");
-          $('.selectedCourseStudentsUl').empty();
-          $.each(students, function(i, val){
-            $('.selectedCourseStudentsUl').append("<li>"+val);
-          });
+            function studentsCount(studentsArr){
+              if (studentsArr[0] == ''){
+                return 0;
+              }else{return studentsArr.length;}
+            }
         });
-
         appendCourses(data);
-
       }).fail(function(err){
         console.log(err);
       });
@@ -253,11 +269,11 @@ function appendCourses(courses){
   //-------------------save new course
 
   $('#newCourseBtn').click(function(){
-      makeNewCourse();
+      makeNewCourse('makenew');
   });
 
   $('#editCourseBtn').click(function(){
-    makeNewCourse();
+    makeNewCourse('update');
   });
 
   function updateCourseInputs(course){
@@ -277,14 +293,15 @@ function appendCourses(courses){
     $('#newCourseImage').val(image);
   }
 
-  function makeNewCourse(){
+  function makeNewCourse(order){
     $('.note').empty();
     var name = $('#newCourseName').val();
     var description = $('#newCourseDiscription').val();
     var image = $('#newCourseImage').val();
     var url = 'dal/main.php?courseName='+name+'&description='+description+'&courseImage='+image;
-    if(display($('#courseIdDelete'))){
-      var id =$('#courseIdDelete').val();
+    if(order == 'update'){
+      var id = $('#courseIdDelete').val();
+      console.log(id);
       url = 'dal/main.php?id='+id+'&courseName='+name+'&description='+description+'&courseImage='+image;
     }
     if (name == "") {
@@ -298,7 +315,47 @@ function appendCourses(courses){
       type: 'GET',
     }).done(function(data){
       console.log(data);
-      updateCourseInputs('');
+      var theCourse = [];
+      theCourse['name'] = name;
+      theCourse['description'] = description;
+      theCourse['image'] = image;
+      showSelectedCourse(theCourse);
+      function showSelectedCourse(theCourse){
+            $('#selectedCourseDescription').show();
+            $('#newCourse').hide();
+            $('#selectedStudentDescription').hide();
+            $('#newStudent').hide();
+            $('#defualtContainer').toggle(display("#selectedCourseDescription"));
+            console.log(theCourse['name']);
+            $('.selectedCourseName').html(theCourse['name']);
+            $('.selectedCourseDescription').empty().append("<p>"+theCourse['description']);
+            $('.selectedCoursePhoto').attr('src', theCourse['image']);
+            $('.selectedCourseStudentsUl').empty();
+            $('.selectedCourseStudentsP').append("there are 0 students attending this course");
+          }
+
+      $('.selectedCourseEdit').click(function(){
+              selectedCourseEdit(theCourse);
+            });
+
+            function selectedCourseEdit(theCourse){
+              $('.deleteCourseSpan').show();
+              $('#editCourseBtn').show();
+              $('#newCourseBtn').hide();
+              showNewCourseContainer();
+              updateCourseInputs(theCourse);
+              $('.selectedCourseStudentsP').empty();
+              $('.selectedCourseStudentsP').append("<p> there are 0 students attending this course");
+            }
+function updateCourseInputs(course){
+      var name = course['name'];
+      var description = course['description'];
+      var image = course['image'];    
+    $('#newCourseName').val(name);
+    $('#newCourseDiscription').val(description);
+    $('#newCourseImage').val(image);
+  }
+
     }).fail(function(err){
       console.log(err);
     });
@@ -306,19 +363,32 @@ function appendCourses(courses){
 
   //------------delete course
   $('#courseDeleteBtn').click(function(){
-    if (!confirm("are you sure you want to dele this course?")) {
+    $('.note').empty();
+    console.log($('#courseIdDelete').val());
+    if ($('#courseIdDelete').val() == '') {
+      $('.note').append("<br><p> please fill the relevant inputs");
+      console.log("please fill in an id");
       return;
     }
-    var id = $('#courseIdDelete').val();
-    if (!id) {console.log("please fill in an id");
-    return;}
+    if (!confirm("are you sure you want to delete that course?")) {
+      return;
+    }
      $.ajax({
       dataType: 'json',
-      url:'dal/main.php?deleteCourse='+id,
+      url:'dal/main.php?deleteCourse='+$('#courseIdDelete').val(),
       type:'GET',
     }).done(function(data){
       console.log(data);
+      if (data) {
+        findAndHideCourseLi($('#courseIdDelete').val());
+
+      }
       $('#courseIdDelete').val('');
+
+      function findAndHideCourseLi(id){
+        $(".courseLi[value="+id+"]").hide();
+      }
+
     }).fail(function(err){
       console.log(err);
    });

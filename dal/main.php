@@ -18,7 +18,8 @@ if (isset($_GET['courses'])) {
 if (isset($_GET['courseName'])) {
 	if (!isset($_GET['id'])) {
 		$course = new Courses($_GET['courseName'], $_GET['description'], $_GET['courseImage'], "");
-		echo json_encode($course->sendToDB());
+		$course->sendToDB();
+		echo json_encode($course);
 	}else{
 		echo json_encode(updateCourse());
 	}	

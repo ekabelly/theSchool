@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jul 14, 2017 at 01:45 PM
+-- Generation Time: Jul 19, 2017 at 08:38 PM
 -- Server version: 10.1.21-MariaDB
 -- PHP Version: 5.6.30
 
@@ -32,17 +32,18 @@ CREATE TABLE `admin` (
   `role` varchar(255) NOT NULL,
   `phone` varchar(255) NOT NULL,
   `email` varchar(255) NOT NULL,
-  `pass` varchar(255) NOT NULL
+  `password` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `admin`
 --
 
-INSERT INTO `admin` (`id`, `name`, `role`, `phone`, `email`, `pass`) VALUES
-(1, 'ido', 'owner', '99965765', 'ekabefgd@gfdgfd.com', '1234'),
-(2, 'sahar', 'manager', '5403543', 'ewqw@rewr', '12345'),
-(3, 'max', 'sales', '54353433', 'ere@dd.com', '2222');
+INSERT INTO `admin` (`id`, `name`, `role`, `phone`, `email`, `password`) VALUES
+(1, 'Ido', 'owner', '052', 'a@a', '1234'),
+(2, 'Amir', 'manager', '052', 'a@a', '1234'),
+(3, 'Eli', 'sales', '052', 'a@a', '1234'),
+(4, 'Yaniv', 'sales', '052', 'y@a', '1234');
 
 -- --------------------------------------------------------
 
@@ -51,10 +52,10 @@ INSERT INTO `admin` (`id`, `name`, `role`, `phone`, `email`, `pass`) VALUES
 --
 
 CREATE TABLE `course` (
-  `course_id` int(11) NOT NULL,
+  `id` int(11) NOT NULL,
   `name` varchar(255) NOT NULL,
   `description` varchar(255) NOT NULL,
-  `photo` varchar(255) NOT NULL,
+  `image` varchar(255) NOT NULL,
   `students_id` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
@@ -62,11 +63,13 @@ CREATE TABLE `course` (
 -- Dumping data for table `course`
 --
 
-INSERT INTO `course` (`course_id`, `name`, `description`, `photo`, `students_id`) VALUES
-(1, 'math', ' ', 'http://deanparkschool.org.uk/pta/wp-content/uploads/sites/2/2015/02/math.jpeg', '1, 3'),
-(6, 'bible', '', 'https://www.bible.com/assets/icons/bible/200/en-df9e42178ce28600ec4049a9dc80d818.png', '1'),
-(9, 'english', '', 'https://img1.etsystatic.com/016/0/8128074/il_570xN.463411311_q6wc.jpg', '1'),
-(12, 'history', '', '', '1');
+INSERT INTO `course` (`id`, `name`, `description`, `image`, `students_id`) VALUES
+(2, 'english', 'ffffaaaaa', '', 'asd, dwq, 1, ido'),
+(4, 'history', 'lalalal13232edsa1495 bla bal', '', 'ido'),
+(5, 'hebrew', '&#1513;&#1500;&#1493;&#1501; &#1506;&#1500;&#1497;&#1499;&#1501;', '', 'ido'),
+(6, 'sports', 'run forest, run!', '', 'ido'),
+(46, 'math', '', '', ''),
+(62, 'hello', 'shalom', '', '');
 
 -- --------------------------------------------------------
 
@@ -81,16 +84,20 @@ CREATE TABLE `students` (
   `email` varchar(255) NOT NULL,
   `image` varchar(255) NOT NULL,
   `courses_id` varchar(255) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 ROW_FORMAT=COMPACT;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `students`
 --
 
 INSERT INTO `students` (`id`, `name`, `phone`, `email`, `image`, `courses_id`) VALUES
-(1, 'dana', '0453453', 'efds@gfd', ' https://picturethismaths.files.wordpress.com/2016/03/fig6bigforblog.png?w=419&h=364', '1,3,4'),
-(2, 'ido', '3243', 'erew@ewrr', 'http://www.ikea.com/gb/en/images/products/myttinge-picture-love__0455526_pe603579_s4.jpg', '1, 2'),
-(3, 'fefer', '76543', 'erew@ewrr', 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTl6dJWEpzILchAbanuwEPnLHG2dGt6B28EN08B2XarqKSbrGr4', '1, 2');
+(1, 'ido', '0999432', 'rew@wewq', '', 'english, math'),
+(2, 'hofit', '03243423', 'hof@hof', '', 'math'),
+(9, 'maya', '1234', '22@33', '', 'history'),
+(13, 'matan', '321', 'wae', '', 'english,sports'),
+(14, 'menahem', '1111111', '111@eeeee', '', 'english,history,sports'),
+(17, 'moti', '1234', 'rrr@eee', '', 'math,history'),
+(18, 'yaniv', '2343', 'e3e@44', '', 'spanish');
 
 --
 -- Indexes for dumped tables
@@ -106,7 +113,7 @@ ALTER TABLE `admin`
 -- Indexes for table `course`
 --
 ALTER TABLE `course`
-  ADD PRIMARY KEY (`course_id`);
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indexes for table `students`
@@ -122,17 +129,17 @@ ALTER TABLE `students`
 -- AUTO_INCREMENT for table `admin`
 --
 ALTER TABLE `admin`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 --
 -- AUTO_INCREMENT for table `course`
 --
 ALTER TABLE `course`
-  MODIFY `course_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=63;
 --
 -- AUTO_INCREMENT for table `students`
 --
 ALTER TABLE `students`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
