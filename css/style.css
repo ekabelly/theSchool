@@ -34,7 +34,7 @@ main {
 	width: 60px;
 	border: black solid 3px;
 }
-.studentsLi, .courseLi {
+.studentLi, .courseLi {
 	display:flex;
     align-items:center;
 }

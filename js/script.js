@@ -16,12 +16,10 @@ $.ajax({
 });
 
 $(document).ready(function(){
-
   function display(someHtmlObj){
   if($(someHtmlObj).css('display') == 'none'){
       return true;
     }else{return false;}
-
 }
 
   //--------students get
@@ -39,30 +37,10 @@ var allStudents = {};
           var name = user['name'];
           var image = user['image'];
           var phone = user['phone'];
-            $('#studentsUl').append("<li class='studentsLi' value="+id+"><img  class='studentPhoto' src="+image+"><ul style='display:inline;' class='studentUl'><li> "+id+" "+name+" <li> "+phone);
+            $('#studentsUl').append("<li class='studentLi' value="+id+"><img  class='studentPhoto' src="+image+"><ul style='display:inline;' class='studentUl'><li> "+id+" "+name+" <li> "+phone);
         });
-        $('.studentsLi').click(function(e){
+        $('.studentLi').click(function(e){
           itemClicked(e, "student", "Student");
-          // var studentId = $(e.target).parents('.studentsLi').val();
-          //   // console.log($(e.target).parents('.studentsLi').val());
-          //   // console.log(data);
-          //   $.each(data, function(i, val){
-          //     // console.log(data[i]['id']);
-          //     if (studentId == data[i]['id']) {
-          //       theStudent = data[i];
-          //     }
-          //   });
-          //  $('#selectedStudentDescription').show();
-          // $('#newCourse').hide();
-          // $('#selectedCourseDescription').hide();
-          // $('#newStudent').hide();
-          // $('#defualtContainer').toggle(display("#selectedStudentDescription"));
-          // console.log(theStudent['name']);
-          // $('.selectedStudentName').html(theStudent['name']);
-          // $('.selectedstudentDescription').empty().append("<p>"+theStudent['phone']+"<br><p>"+theStudent['email']);
-          // $('.selectedStudentPhoto').attr('src', theStudent['image']);
-   
-          // }); 
         });
       }).fail(function(err){
         console.log(err);
@@ -87,13 +65,13 @@ function appendCoursesToStudent(courses){
     console.log('toggle');
     $('.note').empty();
     $('#newCourse').hide();
+    $('#defualtContainer').hide();
     $('#selectedCourseDescription').hide();
     $('#selectedStudentDescription').hide();
     $('#newStudent').show();
     appendCoursesToStudent(allCourses);
     // $('#defualtContainer').toggle(display("#newStudent"));
   }
-
 //-------------------save new student
 
   $('#newStudentBtn').click(function(){
@@ -117,9 +95,6 @@ function appendCoursesToStudent(courses){
       type: 'GET',
     }).done(function(data){
       // console.log(data);
-      // if (data) {
-      //   console.log("new student added");
-      // }
       if (data) {
         console.log("init new student");
         initNewStudent();
@@ -148,19 +123,6 @@ function coursesCheckboxes(){
     //------------delete student
   $('#studentDeleteBtn').click(function(){
       deleteVar("student", "Student");
-   //  var id = $('#studentIdDelete').val();
-   //  if (!id) {console.log("please fill in an id");
-   //  return;}
-   //   $.ajax({
-   //    dataType: 'json',
-   //    url:'dal/main.php?deleteStudent='+id,
-   //    type:'GET',
-   //  }).done(function(data){
-   //    console.log(data);
-   //    $('#studentIdDelete').val('');
-   //  }).fail(function(err){
-   //    console.log(err);
-   // });
   });
 //------courses get
 var allCourses = {};
@@ -180,24 +142,12 @@ var allCourses = {};
 function initCourses(allCourses){
   appendAllItemsToList(allCourses, "course");
   $('.courseLi').click(function(e){
-    courseClicked(e, "course", "Course");
+    itemClicked(e, "course", "Course");
   });
-}
-    
-function courseClicked(e){
-  var courseId = $(e.target).parents('.courseLi').val();
-  console.log(courseId);
-  var theCourse = {};
-  $.each(allCourses, function(i, val){
-    if (courseId == allCourses[i]['id']) {
-      theCourse = allCourses[i];
-    }
-  });        
-  showSelectedItem(theCourse, "course", "Course");
 }
 
 function itemClicked(e, itemNameLo, itemNameUp){
-  var itemId = $(e.target).parents('.'+itemNameLo+'sLi').val();
+  var itemId = $(e.target).parents('.'+itemNameLo+'Li').val();
   // console.log("item id "+itemId);
   var theItem = {};
   if (itemNameLo == "course") {
@@ -217,17 +167,6 @@ function itemClicked(e, itemNameLo, itemNameUp){
 }
 
 //-----------------edit course
-
-function selectedCourseEdit(theCourse){
-  $('.deleteCourseSpan').hide();
-  // console.log()
-    if (theCourse['students_id'] == "") {$('.deleteCourseSpan').show();}
-      $('#editCourseBtn').show();
-      $('#newCourseBtn').hide();
-      showNewCourseContainer();
-      updateCourseInputs(theCourse);
-      HowManyItemsOnEdit(theCourse);
-  }
 
 function selectedItemEdit(theItem, itemNameLo,itemNameUp){
   if (itemNameUp == "Course") {
@@ -257,23 +196,18 @@ function HowManyItemsOnEdit(theItem){
 
 //--------------append courses list after ajax
 
-
-function appendCourses(allCourses){
-  allCourses.forEach(function(course){
-    // console.log(course);
-    var id = course['id'];
-    var name = course['name'];
-    var image = course['image'];
-    $('.coursesUl').append("<li class='courseLi' value="+id+"><img  class='coursePhoto' src="+image+"><ul style='display:inline;' class='courseUl'><li> "+id+" "+name);
-  });
-  createWelcomeMessege(allItems, itemNameLo);
-}
-
 function appendAllItemsToList(allItems, itemNameLo){
   $.each(allItems, function(i, val){
     appendItemToList(val, itemNameLo);
   });
   createWelcomeMessege(allItems, itemNameLo);
+}
+
+function appendItemToList(theItem, itemNameLo){
+    var id = theItem['id'];
+    var name = theItem['name'];
+    var image = theItem['image'];
+  $('.'+itemNameLo+'sUl').append("<li class='"+itemNameLo+"Li' value="+id+"><img  class='"+itemNameLo+"Photo' src="+image+"><ul style='display:inline;' class='"+itemNameLo+"Ul'><li> "+id+" "+name);
 }
 
 function createWelcomeMessege(allItems, itemNameLo){
@@ -287,63 +221,24 @@ function createWelcomeMessege(allItems, itemNameLo){
    $('.welcomeMessege').append(append);
 }
 
-function appendItemToList(theItem, itemNameLo){
-    var id = theItem['id'];
-    var name = theItem['name'];
-    var image = theItem['image'];
-  $('.'+itemNameLo+'sUl').append("<li class='"+itemNameLo+"Li' value="+id+"><img  class='"+itemNameLo+"Photo' src="+image+"><ul style='display:inline;' class='"+itemNameLo+"Ul'><li> "+id+" "+name);
-}
-
-//----------show selected course
-          
-// function showSelectedCourse(theItem, itemNameLo, itemNameUp){
-//   if (itemNameLo == "course") {
-//     $('#selectedStudentDescription').show();
-//     $('#selectedCourseDescription').hide();
-//     $('#defualtContainer').toggle(display("#selectedStudentDescription"));
-//   }
-//   if (itemNameLo =="student") {
-//     $('#selectedCourseDescription').show();
-//     $('#selectedStudentDescription').hide();
-//     $('#defualtContainer').toggle(display("#selectedCourseDescription"));
-//   }
-//   $('#newCourse').hide();
-//   $('#newStudent').hide();
-//   console.log(theItem['name']);
-//   $('.selected'+itemNameUp+'Name').html(theItem['name']);
-//   $('.selected'+itemNameUp+'Description').empty().append("<p>"+theItem['description']);
-//   // if (theItem['students_id']) {
-//   //   // console.log("appending students");
-//   //   $('.selectedCoursePhoto').attr('src', theItem['image']);
-//   // }
-//   //-----------------------------stopped here
-//   $('.selectedCourseStudentsUl').empty();
-//   if (theItem['students_id'].length != 0) {
-//     appendItemListToSelectedItem(theItem, "course", "students");
-//   }
-//   $('.selectedCourseEdit').click(function(){ //---------click edit
-//     selectedCourseEdit(theItem);
-//   });
-// }
-
 function showSelectedItem(theItem, itemNameLo, itemNameUp){
   if (itemNameLo == "course") {
-    // console.log("itemNameLo = course");
     $('#selectedStudentDescription').hide();
     $('#selectedCourseDescription').show();
     // $('#defualtContainer').toggle(display("#selectedCourseDescription"));
-    if (theItem['students_id'].length != 0) {
+    $('')
+    // if (theItem['students_id'].length != 0) {
       appendItemListToSelectedItem(theItem, "course", "students");
-    }
+    // }
     var description = "<p>"+theItem['description'];
   }
   if (itemNameLo =="student") {
     // console.log("itemNameLo = student");
     $('#selectedCourseDescription').hide();
     $('#selectedStudentDescription').show();
-    if (theItem['courses_id'].length != 0) {
+    // if (theItem['courses_id'].length != 0) {
       appendItemListToSelectedItem(theItem, "student", "courses");
-    }
+    // }
     var description = "<p>"+theItem['phone']+"<p>"+theItem['email'];
   }
    $('#defualtContainer').toggle(display("#selected"+itemNameUp+"Description"));
@@ -352,46 +247,31 @@ function showSelectedItem(theItem, itemNameLo, itemNameUp){
   console.log(theItem['name']);
   $('.selected'+itemNameUp+'Name').html(theItem['name']);
   $('.selected'+itemNameUp+'Description').empty().append(description);
-  // if (theItem['students_id']) {
-  //   // console.log("appending students");
-  //   $('.selectedCoursePhoto').attr('src', theItem['image']);
-  // }
   $('.selected'+itemNameUp+'Edit').click(function(){ //---------click edit
     selectedItemEdit(theItem, itemNameLo, itemNameUp);
   });
 }
 
 function appendItemListToSelectedItem(theItem, theItemNameLo, theListNameLo){
-  var list = theItem[theListNameLo+'_id'].split(", ");
-  if (theItemNameLo == "student") {
-    var theClass = ".selectedStudentCoursesUl"
+  var ul = whichUl(theItemNameLo);
+  $(ul).empty();
+  if (theItem[theListNameLo+'_id']) {
+    var list = theItem[theListNameLo+'_id'].split(", ");
+    for (var i = list.length - 1; i >= 0; i--) {
+    $(ul).append("<li>"+list[i]);
+    }
   }
-  if (theItemNameLo == "course") {
-    var theClass = ".selectedCourseStudentsUl"
-  }
-  $(theClass).empty();
   // console.log(list);
-  for (var i = list.length - 1; i >= 0; i--) {
-    $(theClass).append("<li>"+list[i]);
-  }
 }
 
-// function studentsCount(studentsArr){    ///--------- may delete
-//     if (studentsArr[0] == ''){
-//       return 0;
-//     }else{return studentsArr.length;}
-// }
-
-//-------------- show course description ------ may delete
-
-//       function toggleSelectedCourse(e){
-//           console.log("courseLi click");
-//           $('#selectedCourseDescription').toggle();
-//           $('#newCourse').hide();
-//           $('#selectedStudentDescription').hide();
-//           $('#newStudent').hide();
-//           $('#defualtContainer').toggle(display("#selectedCourseDescription"));
-//         }
+function whichUl(theItemNameLo){
+    if (theItemNameLo == "student") {
+    return ".selectedStudentCoursesUl"
+  }
+  if (theItemNameLo == "course") {
+    return ".selectedCourseStudentsUl"
+  }
+}
 //--------------course main container
 
   $('#coureBtn').click(function(){
@@ -399,7 +279,7 @@ function appendItemListToSelectedItem(theItem, theItemNameLo, theListNameLo){
     $('#editCourseBtn').hide();
     $('.welcomeMessege').hide();
     $('#newCourseBtn').show();
-    updateCourseInputs('');
+    updateItemInputs('');
     showNewCourseContainer();
   });
 
@@ -422,23 +302,6 @@ function appendItemListToSelectedItem(theItem, theItemNameLo, theListNameLo){
   $('#editCourseBtn').click(function(){
     makeNewCourse('update');
   });
-
-  function updateCourseInputs(course){
-    // if (course == '') {
-    //   var name = '';
-    //   var description = '';
-    //   var image = '';
-    // }else{
-      var id = course['id'];
-      var name = course['name'];
-      var description = course['description'];
-      var image = course['image'];
-      $('#courseIdDelete').val(id);
-    // }
-    $('#newCourseName').val(name);
-    $('#newCourseDiscription').val(description);
-    $('#newCourseImage').val(image);
-  }
 
   function updateItemInputs(item, itemNameLo, itemNameUp){
     var id = item['id'];
@@ -495,11 +358,13 @@ function appendItemListToSelectedItem(theItem, theItemNameLo, theListNameLo){
       if (itemNameLo == "course") {
         theItem['students_id'] = "";
       }
-      if (itemNameLo == "students") {
-        theItem['courses_id'] = "";
+      if (itemNameLo == "student") {
+        theItem['phone'] = $('#new'+itemNameUp+'Phone').val();
+        theItem['email'] = $('#new'+itemNameUp+'Email').val();
+        theItem['courses_id'] = coursesCheckboxes().join(", ");
       }
       showSelectedItem(theItem, itemNameLo, itemNameUp);
-      appendItemToList(theItem);
+      appendItemToList(theItem, itemNameLo);
   }
 
   //------------delete course
@@ -525,37 +390,12 @@ function deleteVar(varLower, varUp){
       }
     }).fail(function(err){
       console.log(err);
-   });
-      
+   });     
 }
 
   $('#courseDeleteBtn').click(function(){
       deleteVar("course", "Course");
-  //     $('.note').empty();
-  //     var idInput = '#'+var+'IdDelete';
-  //     console.log($('#courseIdDelete').val());
-  //     if ($(idInput).val() == '') {
-  //           $('.note').append("<br><p> please fill the relevant inputs");
-  //           console.log("please fill in an id");
-  //           return;
-  //     }
-  //   }
-  //    $.ajax({
-  //     dataType: 'json',
-  //     url:'dal/main.php?delete'+var+'='+$('#courseIdDelete').val(),
-  //     type:'GET',
-  //   }).done(function(data){
-  //     console.log(data);
-  //     if (data) {
-  //       findAndHideCourseLi($('#courseIdDelete').val());
-
-  //     }
-  //     $('#courseIdDelete').val('');
-  //   }).fail(function(err){
-  //     console.log(err);
-  //  });
   });
-
       function findAndHideVarLi(varLower, id){
             $("."+varLower+"Li[value="+id+"]").hide();
       }
