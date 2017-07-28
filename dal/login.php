@@ -9,9 +9,9 @@ if (isset($_POST['username']) && isset($_POST['pass'])) {
 	$row = mysqli_fetch_row($result);
 	Database::close();
 	if (sizeof($row) > 0) {
-		$_SESSION['pass'] = $pass;
+		$_SESSION['role'] = $row[2];
 		$_SESSION['username'] = $username;
-		echo json_encode($username);
+		echo json_encode($_SESSION);
 	}else{
 		echo json_encode(false);
 	}

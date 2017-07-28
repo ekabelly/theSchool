@@ -156,3 +156,49 @@ delete student
   //   $('#newCourseDiscription').val(description);
   //   $('#newCourseImage').val(image);
   // }
+
+  // newCourseBtn
+
+  //     $('.note').empty();
+  //   var name = $('#newStudentName').val();
+  //   var phone = $('#newStudentPhone').val();
+  //   var email = $('#newStudentEmail').val();
+  //   var image = $('#newStudentImage').val();
+  //   var courses = coursesCheckboxes();
+  //   courses = courses.join(", ");
+  //   console.log(courses);
+  //   // console.log(name, email);
+  //   if (name == "" || email == "") {
+  //     console.log("empty input");
+  //     $('.note').append("<br><p> please fill a name & an email");
+  //     return ;
+  //   }
+  //   $.ajax({
+  //     dataType: 'json',
+  //     url:'dal/main.php?studentName='+name+'&email='+email+'&phone='+phone+'&studentImage='+image+'&courses_id='+courses,
+  //     type: 'GET',
+  //   }).done(function(data){
+  //     // console.log(data);
+  //     if (data) {
+  //       console.log("init new student");
+  //       initNewStudent();
+  //     }
+  //   }).fail(function(err){
+  //     console.log(err);
+  //   });
+
+  sudents get
+
+     // allStudents = data;
+        // $('#defualtContainer').append("<h3 class='welcomeMessege'> the school has "+data.length+" students");
+        // data.forEach(function(user){
+        //   // console.log(user);
+        //   var id = user['id'];
+        //   var name = user['name'];
+        //   var image = user['image'];
+        //   var phone = user['phone'];
+        //     $('#studentsUl').append("<li class='studentLi' value="+id+"><img  class='studentPhoto' src="+image+"><ul style='display:inline;' class='studentUl'><li> "+id+" "+name+" <li> "+phone);
+        // });
+        // $('.studentLi').click(function(e){
+        //   itemClicked(e, "student", "Student");
+        // });

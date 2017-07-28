@@ -10,7 +10,7 @@
 	height: 138px;
 }
 
-#selectedCourseDescription, #selectedStudentDescription, #newCourse, #newStudent, #admin, #student, #editStudent, #course, #editCourse, #editAdmin, #userNavDis, #navLinks {
+#selectedCourseDescription, #selectedStudentDescription, #newCourse, #newStudent, #admin, #student, #editStudent, #course, #editCourse, #editAdmin {
 	display: none;
 }
 main {

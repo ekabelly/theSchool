@@ -13,6 +13,15 @@ if (isset($_GET['courses'])) {
 	echo json_encode($courses);
 }
 
+if (isset($_GET['all'])) {	
+	$all = [];	
+	$courses = Courses::getCoursesDB($_GET['all']);
+	$students = Student::getStudentDB($_GET['all']);
+	$all['students'] = $students;
+	$all['courses'] = $courses;
+	echo json_encode($all);
+}
+
 
 //----------new course & edit course
 if (isset($_GET['courseName'])) {
@@ -54,15 +63,36 @@ function deleteCourse($id){
 	return false;
 }
 
-//-------------new student
+//-------------new student and update student
 
 if (isset($_GET['studentName']) && isset($_GET['email'])) {
-	if (isset($_GET['courses_id'])) {
-		$student = new Student($_GET['studentName'], $_GET['phone'], $_GET['email'], $_GET['studentImage'], $_GET['courses_id']);	
+	if (!isset($_GET['id'])) {
+		if (isset($_GET['courses_id'])) {
+			$student = new Student($_GET['studentName'], $_GET['phone'], $_GET['email'], $_GET['studentImage'], $_GET['courses_id']);	
+		}else{
+			$student = new Student($_GET['studentName'], $_GET['phone'], $_GET['email'], $_GET['studentImage'], "");
+		}
+		echo json_encode($student->sendToDB());
 	}else{
-		$student = new Student($_GET['studentName'], $_GET['phone'], $_GET['email'], $_GET['studentImage'], "");
+		echo json_encode(updateStudent());
 	}
-	echo json_encode($student->sendToDB());
+}
+
+//-----------update student
+
+function updateStudent(){
+	$id = $_GET['id'];
+	$name = $_GET['studentName'];
+	$phone = $_GET['phone'];
+	$email = $_GET['email'];
+	$image = $_GET['studentImage'];
+	$courses = $_GET['courses_id'];
+	$sql = "UPDATE students SET id='$id',name='$name',phone='$phone',email='$email',courses_id='$courses',image='$image' WHERE id='$id'";
+	$result = conn($sql);
+	if ($result) {
+		return true;
+	}
+	return false;
 }
 
 //------------delete student

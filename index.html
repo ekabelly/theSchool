@@ -16,10 +16,19 @@
         <img alt="Brand" src="uploads/img/logo2.jpg" id="logo">
     </div>
     <ul class="nav navbar-nav" id="navLinks">
-    		<li id="schoolLink"><a href="#"> school</a></li>
-    		<li id="adminLink"> <a href="#"> admin</a></li>
+    		<li id="schoolLink">
+    				<a role="button" href="index.html"> school</a>
+    		</li>
+    		<li id="adminLink">
+    				<a role="button" href="admin.html"> admin</a>
+    		</li>
     	</ul>
-        <p class="navbar-text navbar-right" id="userNavDis">Signed in as <a href="#" class="navbar-link">Mark Otto</a></p>
+    	<ul class="nav navbar-nav navbar-right">
+    		<li>
+    			<a role="button" id="logoutBtn">logout</a>
+    		</li>
+    	</ul>
+        <p class="navbar-text navbar-right col-md-1" id="userNavDis"></p>
   </div>
 </nav>
 </header>
@@ -29,7 +38,7 @@
 			<div id="coursesList" class="col-md-3">
 				<h3>
 					Courses 
-					<button type="button" class="btn btn-default" id="coureBtn" aria-label="justify">
+					<button type="button" class="btn btn-default" id="courseBtn" aria-label="justify">
 					<span aria-hidden="true" class="glyphicon glyphicon-plus"></span>
 					</button>
 				</h3>
@@ -65,8 +74,8 @@
 						<input type="text" id="newCourseName" name="courseName">
 					</div> <br>
 					<div class="row col-md-offset-1">
-						<label for="newCourseDiscription"> description </label>
-						<textarea id="newCourseDiscription"></textarea>
+						<label for="newCourseDescription"> description </label>
+						<textarea id="newCourseDescription"></textarea>
 					</div> <br>
 					<div class="row col-md-offset-1">
 						<label for="newCourseImage"> photo </label>
@@ -105,6 +114,7 @@
 					</div>
 				</div>
 				<div id="defualtContainer" class="row">
+					<h6 class="welcomeMessege text-center" style="font-size: 200%"></h6>
 				</div>
 				<div id="selectedCourseDescription">
 					<br>

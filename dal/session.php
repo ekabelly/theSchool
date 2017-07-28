@@ -1,7 +1,7 @@
 <?php
 session_start();
-if(isset($_SESSION['username'])){
-	echo json_encode($_SESSION['username']);
+if(isset($_SESSION)){
+	echo json_encode($_SESSION);
 }else{
 	echo json_encode(false);
 }
