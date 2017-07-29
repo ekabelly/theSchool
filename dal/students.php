@@ -7,11 +7,9 @@ class Student {
 	private $phone;
 	private $email;
 	private $image;
-	private $courses_id;
 	static $student;
 
-	public function __construct($name, $phone, $email, $image, $courses_id){
-		$this->courses_id = $courses_id;
+	public function __construct($name, $phone, $email, $image){
 		$this->name = $name;
 		$this->phone = $phone;
 		$this->email = $email;
@@ -21,23 +19,26 @@ class Student {
 	public function getStudent(){
 		$student1['id'] = $this->id;
 		$student1['name'] = $this->name;
-		$student1['courses'] = $this->courses;
 		$student1['phone'] = $this->phone;
 		$student1['email'] = $this->email;
 		$student1['image'] = $this->image;
-		$student1['courses_id'] = $this->courses_id;
 		return $student1;
+	}
+
+	public function getEmail(){
+		return $this->email;
 	}
 
 	public function getStudentDB($id){
 		if ($id == 0) {
-			$sql = "select * from students";
-		}else{$sql = "select * from students where id = $id";}
+			$sql = "SELECT * FROM students";
+		}else{$sql = "SELECT * FROM students where id = '$id'";}
 		$result = conn($sql);
 		$row = mysqli_fetch_assoc($result);
 		if ($id == 0) {
 			$students = [];
 			while($row){
+				$row['courses'] = Student::getCourseListForStudent($row['id']);
 				array_push($students, $row);
 				$row = mysqli_fetch_assoc($result);
 			}
@@ -47,50 +48,43 @@ class Student {
 		if ($id == 0) {
 			return $students;
 		}
+		$row['courses'] = Student::getCourseListForStudent($row['id']);
 		return $row;
-
 	}
 
-	// public function getAllStudentsDB(){
-	// 	$sql = "select * from students";
-	// 	$result = conn($sql);
-	// 	$row = mysqli_fetch_row($result);
-	// 	$students = [];
-	// 	while($row){
-	// 		array_push($students, $row);
-	// 		$row = mysqli_fetch_assoc($result);
-	// 	}
-	// 	include 'release.php';
-	// 	Database::close();
-	// 	return $students;
-	// }
+	public function getCourseListForStudent($id){
+		$sql = "SELECT course.name, course.id FROM enrollment inner JOIN course on enrollment.course_id = course.id where enrollment.student_id = '$id'";
+		$result = conn($sql);
+		$row = mysqli_fetch_row($result);
+		$courses = [];
+		while($row){
+			array_push($courses, $row);
+			$row = mysqli_fetch_row($result);
+		}
+		include 'release.php';
+		Database::close();
+		return $courses;
+	}
 
-	public function getId(){
-		return $this->id;
+	public function getId($email){
+		$sql = "select id from students where email = '$email'";
+		$result = conn($sql);
+		$row = mysqli_fetch_row($result);
+		include 'release.php';
+		Database::close();
+		return $row[0];
 	}
 
 	public function sendToDB(){
 		$name = $this->name;
-		$courses_id = $this->courses_id;
 		$phone = $this->phone;
 		$email = $this->email;
 		$image = $this->image;
-		$sql = "INSERT INTO students(name, phone, email, image, courses_id) VALUES ('$name', '$phone', '$email', '$image', '$courses_id')";
+		$sql = "INSERT INTO students(name, phone, email, image) VALUES ('$name', '$phone', '$email', '$image')";
 		$result = conn($sql);
 		Database::close();
-		if ($result) {
-			return true;
-		}else{ return false;}
-		Database::close();
+		return $result;
 	}
 }
-
-
-// $courses_id = ['1', '2'];
-// $ido = new Student($courses_id, 'ido', '3243', 'erew@ewrr', 'fdsfds');
-
-// $student = Student::getStudentDB(0);
-// var_dump($student);
-// echo $student['name']." ".$student['id'];
 
 ?>

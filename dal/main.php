@@ -10,6 +10,7 @@ if (isset($_GET['students'])) {
 
 if (isset($_GET['courses'])) {		
 	$courses = Courses::getCoursesDB($_GET['courses']);
+	// print_r($courses);
 	echo json_encode($courses);
 }
 
@@ -26,7 +27,7 @@ if (isset($_GET['all'])) {
 //----------new course & edit course
 if (isset($_GET['courseName'])) {
 	if (!isset($_GET['id'])) {
-		$course = new Courses($_GET['courseName'], $_GET['description'], $_GET['courseImage'], "");
+		$course = new Courses($_GET['courseName'], $_GET['description'], $_GET['courseImage']);
 		$course->sendToDB();
 		echo json_encode($course);
 	}else{
@@ -42,11 +43,13 @@ function updateCourse(){
 	$image = $_GET['courseImage'];
 	$sql = "UPDATE course SET id='$id',name='$name',description='$description',image='$image' WHERE id='$id'";
 	$result = conn($sql);
+	Database::close();
 	if ($result) {
 		return true;
 	}
 	return false;
 }
+
 
 //------------delete course
 
@@ -57,6 +60,7 @@ if (isset($_GET['deleteCourse'])) {
 function deleteCourse($id){
 	$sql = "delete from course where id = '$id'";
 	$result = conn($sql);
+	Database::close();
 	if ($result) {
 		return true;
 	}
@@ -67,15 +71,74 @@ function deleteCourse($id){
 
 if (isset($_GET['studentName']) && isset($_GET['email'])) {
 	if (!isset($_GET['id'])) {
-		if (isset($_GET['courses_id'])) {
-			$student = new Student($_GET['studentName'], $_GET['phone'], $_GET['email'], $_GET['studentImage'], $_GET['courses_id']);	
-		}else{
-			$student = new Student($_GET['studentName'], $_GET['phone'], $_GET['email'], $_GET['studentImage'], "");
-		}
-		echo json_encode($student->sendToDB());
+			$student = new Student($_GET['studentName'], $_GET['phone'], $_GET['email'], $_GET['studentImage']);
+		$result2 = $student->sendToDB();
+		$id = $student->getId($student->getEmail());
+		echo $id;
+		$result = insertCoursesToEnrollment($_GET['courses_id'], $id);
+		echo json_encode($result2);
 	}else{
 		echo json_encode(updateStudent());
 	}
+}
+
+//--------------------update student on course
+if (isset($_GET['coursesUpdate'])) {
+	if ($_GET['coursesUpdate'] != []) {
+		$result2 = deleteCourses($_GET['coursesUpdate'], $_GET['id']);
+	}
+	$result1 = insertCoursesToEnrollment($_GET['coursesUpdate'], $_GET['id']);
+	echo json_encode($result2);
+}
+
+function deleteCourses($coursesId, $studentId){
+	$coursesIdList = explode(", ", $coursesId);
+	$coursesToDelete = coursesToDelete($coursesIdList, $studentId);
+	// print_r($coursesToDelete);
+	$result = [];
+	foreach ($coursesToDelete as $key => $value) {
+		array_push($result, deleteEnrollment($value, $studentId));
+	} Database::close();
+	return $result;
+}
+
+function coursesToDelete($coursesIdList, $studentId){
+	$student = Student::getStudentDB($studentId);
+	$coursesToDelete = [];
+	$flag = true;
+	foreach ($student['courses'] as $key => $old) {
+		foreach ($coursesIdList as $key => $update) { //-- $update points to an id
+			if ($update == $old[1]) { //---------$old is an array [name, id]
+				$flag = false;
+			}
+		}
+		if ($flag) {
+			array_push($coursesToDelete, $old[1]);
+		} $flag = true;
+	} return $coursesToDelete;
+}
+
+function insertCoursesToEnrollment($coursesId, $studentId){
+	$coursesIdList = explode(", ", $coursesId);
+	// print_r($coursesIdList);
+	$array = [];
+	foreach ($coursesIdList as $key => $value) {
+		array_push($array, insertACourseIntoEnrollment($value, $studentId));
+	} Database::close();
+	return $array;
+}
+
+function insertACourseIntoEnrollment($course, $studentId){
+	$sql = "INSERT INTO enrollment(student_id, course_id) VALUES ('$studentId', '$course')";
+	$result = conn($sql);
+	return $result;
+}
+
+//------------delete enrollment
+function deleteEnrollment($courseId, $studentId){
+	$sql = "DELETE FROM enrollment WHERE student_id = '$studentId' and course_id = '$courseId'";
+	$result = conn($sql);
+	return $result;
 }
 
 //-----------update student
@@ -86,9 +149,9 @@ function updateStudent(){
 	$phone = $_GET['phone'];
 	$email = $_GET['email'];
 	$image = $_GET['studentImage'];
-	$courses = $_GET['courses_id'];
-	$sql = "UPDATE students SET id='$id',name='$name',phone='$phone',email='$email',courses_id='$courses',image='$image' WHERE id='$id'";
+	$sql = "UPDATE students SET id='$id',name='$name',phone='$phone',email='$email',image='$image' WHERE id='$id'";
 	$result = conn($sql);
+	Database::close();
 	if ($result) {
 		return true;
 	}
@@ -104,6 +167,7 @@ if (isset($_GET['deleteStudent'])) {
 function deleteStudent($id){
 	$sql = "delete from students where id = '$id'";
 	$result = conn($sql);
+	Database::close();
 	if ($result) {
 		return true;
 	}

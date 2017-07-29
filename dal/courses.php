@@ -19,17 +19,12 @@ class Courses {
 
 	public function sendToDB(){
 		$name = $this->name;
-		// $students_id = $this->students_id;
-		// $students_id = implode(", ", $students_id);
 		$description = $this->description;
 		$photo = $this->image;
-		$sql = "INSERT INTO course(name, description, image, students_id) VALUES ('$name', '$description', '$photo', '')";
+		$sql = "INSERT INTO course(name, description, image) VALUES ('$name', '$description', '$photo')";
 		$result = conn($sql);
 		Database::close();
-		if ($result) {
-			return true;
-		}else{ return false;}
-		Database::close();
+		return $result;
 	}
 
 	public function getCoursesDB($id){
@@ -38,11 +33,17 @@ class Courses {
 		}else{$sql = "select * from course where id = $id";}
 		$result = conn($sql);
 		$row = mysqli_fetch_assoc($result);
+		if ($row) {
+			$row['students'] = Courses::getStudentListPerCourse($row['id']);
+		}
 		if ($id == 0) {
 			$courses = [];
 			while($row){
 				array_push($courses, $row);
 				$row = mysqli_fetch_assoc($result);
+				if ($row) {
+					$row['students'] = Courses::getStudentListPerCourse($row['id']);
+				}
 			}
 		}
 		include 'release.php';
@@ -51,9 +52,22 @@ class Courses {
 			return $courses;
 		}
 		return $row;
-
 	}
-}
+
+public function getStudentListPerCourse($id){
+		$sql = "SELECT students.name, students.id FROM enrollment inner JOIN students on enrollment.student_id = students.id where enrollment.course_id = '$id'";
+		$result = conn($sql);
+		$row = mysqli_fetch_row($result);
+		$students = [];
+		while($row){
+			array_push($students, $row);
+			$row = mysqli_fetch_row($result);
+		}
+		include 'release.php';
+		Database::close();
+		// print_r($students);
+		return $students;
+	}
 
 // function getCourseDB($id){
 // 	$sql = "select * from course where course_id = $id";
@@ -67,5 +81,6 @@ class Courses {
 // $students = explode(", ", getCourseDB(1)['students_id']); echo "<br>";
 // $student = Student::getStudentDB($students[0]);
 // var_dump($student);
+}
 
 ?>

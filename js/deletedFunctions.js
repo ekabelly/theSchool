@@ -202,3 +202,38 @@ delete student
         // $('.studentLi').click(function(e){
         //   itemClicked(e, "student", "Student");
         // });
+
+        // function showNewMadeItem(order, itemNameLo, itemNameUp){
+  //   var theItem = {};
+  //     theItem['name'] = $('#new'+itemNameUp+'Name').val();
+  //     theItem['description'] = $('#new'+itemNameUp+'Description').val();
+  //     theItem['image'] = $('#new'+itemNameUp+'Image').val();
+  //     if (itemNameLo == "course") {
+  //       theItem['students_id'] = "";
+  //     }
+  //     if (itemNameLo == "student") {
+  //       theItem['phone'] = $('#new'+itemNameUp+'Phone').val();
+  //       theItem['email'] = $('#new'+itemNameUp+'Email').val();
+  //       theItem['courses_id'] = coursesCheckboxes().join(", ");
+  //     }
+  //     showSelectedItem(theItem, itemNameLo, itemNameUp);
+  //     if (order == 'new') {
+  //       appendItemToList(theItem, itemNameLo);
+  //     }
+  // }
+
+
+  php 
+    // public function getAllStudentsDB(){
+  //  $sql = "select * from students";
+  //  $result = conn($sql);
+  //  $row = mysqli_fetch_row($result);
+  //  $students = [];
+  //  while($row){
+  //    array_push($students, $row);
+  //    $row = mysqli_fetch_assoc($result);
+  //  }
+  //  include 'release.php';
+  //  Database::close();
+  //  return $students;
+  // }
