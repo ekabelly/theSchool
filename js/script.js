@@ -1,3 +1,8 @@
+// studentIdDelete
+// itemNameLo+"IdDelete"
+
+
+// getSpecificItemByName(data, name, itemNameLo)
 //---init session
 
 var user = {};
@@ -12,6 +17,7 @@ function checkForSession(){
         window.location.href="login.html";
       }else{
         $('body').show();
+        console.log(data)
         console.log("welcome "+data['role']);
         user = data;
         initUserInPage(data);
@@ -20,7 +26,6 @@ function checkForSession(){
       console.log(err);
   });
 }
-
   //--------init the page depending on user
 
 function initUserInPage(data){
@@ -33,17 +38,20 @@ function initUserInPage(data){
 
 $(document).ready(function(){
 
+var imageName = '123';
 //--------logout
 
 $('#logoutBtn').click(function(){
   logoutClicked();
-  window.location.href="login.html";
 });
 
 function logoutClicked(){
   $.ajax({
     url:'dal/logout.php',
     type:'POST'
+  }).done(function(data){
+    console.log(data);
+    window.location.href = data;
   });
 }
 
@@ -58,11 +66,13 @@ function logoutClicked(){
   //--------students get
 var allStudents = {};
 var allCourses = {};
+var allAdmins = {};
 initPage();
 
 function initPage(){
   getStudents();
   getCourses();
+  getAdmins();
 }
 
 function getStudents(){
@@ -91,7 +101,7 @@ function appendCoursesToStudent(courses){
 //---------- student main container
 
   $('#studentsBtn').click(function(){
-    updateItemInputs('','','');
+    updateItemInputs('','student','Student');
     showNewStudentPage();
     $('.newStudentTitle').html('new student');
     $('.deleteStudentSpan').hide();
@@ -117,12 +127,14 @@ function appendCoursesToStudent(courses){
 //-------------------save new student
 
   $('#newStudentBtn').click(function(){
-    emptyInputs("student", "Student");
-    makeNewItem('new', "student", "Student");
+
+    if(!checkInputForNull("student", "Student")){
+      makeNewItem('new', "student", "Student");
     // showNewMadeItem("student", "Student", "new");
+    }
   });
 
-function emptyInputs(itemNameLo, itemNameUp){
+function checkInputForNull(itemNameLo, itemNameUp){
     $('.note').empty();
         if ($('#new'+itemNameUp+'Name').val() == "") {
             return messegeForEmptyInput();
@@ -195,6 +207,9 @@ function itemClicked(e, itemNameLo, itemNameUp, allItems){
   if (itemNameLo == "student") {
     var allItems = allStudents;
   }
+  if (itemNameLo == 'admin') {
+    var allItems = allAdmins;
+  }
   $.each(allItems, function(i, val){
     if (itemId == allItems[i]['id']) {
       theItem = allItems[i];
@@ -207,7 +222,7 @@ function itemClicked(e, itemNameLo, itemNameUp, allItems){
 
 //-----------------edit course
 
-function selectedItemEdit(theItem, itemNameLo,itemNameUp){
+function selectedItemEdit(theItem, itemNameLo, itemNameUp){
   if (itemNameUp == "Course") {
     $('.delete'+itemNameUp+'Span').hide();
     showNewCourseContainer();
@@ -216,6 +231,9 @@ function selectedItemEdit(theItem, itemNameLo,itemNameUp){
   if (itemNameLo == "student") {
     $('.delete'+itemNameUp+'Span').show();
     showNewStudentPage();
+  }
+  if (itemNameLo == 'admin') {
+    showNewAdminPage();
   }
   $('#edit'+itemNameUp+'Btn').show();
   $('#new'+itemNameUp+'Btn').hide();
@@ -226,7 +244,7 @@ function selectedItemEdit(theItem, itemNameLo,itemNameUp){
     // console.log(theItem);
     var courses = HowManyCoursesOnEdit(theItem);
     console.log(courses);
-    if (courses == 0) {
+    if (courses == 0 && user['role'] != 'sales') {
       $('.delete'+itemNameUp+'Span').show();
     }
   }
@@ -256,7 +274,7 @@ function appendItemToList(theItem, itemNameLo){
     var id = theItem['id'];
     var name = theItem['name'];
     var image = theItem['image'];
-  $('.'+itemNameLo+'sUl').append("<li class='"+itemNameLo+"Li' value="+id+"><img  class='"+itemNameLo+"Photo' src="+image+"><ul style='display:inline;' class='"+itemNameLo+"Ul'><li> "+id+" "+name);
+  $('.'+itemNameLo+'sUl').append("<li class='"+itemNameLo+"Li' value="+id+"><img  class='"+itemNameLo+"Photo' src='dal/uploads/"+image+"'><ul style='display:inline;' class='"+itemNameLo+"Ul'><li> "+id+" "+name);
 }
 
 function createWelcomeMessege(allItems, itemNameLo){
@@ -271,30 +289,30 @@ function createWelcomeMessege(allItems, itemNameLo){
 }
 
 function showSelectedItem(theItem, itemNameLo, itemNameUp){
-    $('#newCourse').hide();
-    $('#newStudent').hide();
+  $('#newCourse').hide();
+  $('#newStudent').hide();
+  $('#selectedStudentDescription').hide();
+  $('#selectedCourseDescription').hide();
+  $('#selected'+itemNameUp+'Description').show();
+  if (itemNameLo == 'admin') {
+    $('#newAdmin').hide();
+    var description = "<p>"+theItem['phone']+"<p>"+theItem['email'];
+  }
   if (itemNameLo == "course") {
-    $('#newCourse').hide();
-    $('#newStudent').hide();
-    $('#selectedStudentDescription').hide();
-    $('#selectedCourseDescription').show();
     // $('#defualtContainer').toggle(display("#selectedCourseDescription"));
       appendItemListToSelectedItem(theItem, "course", "students");
     var description = "<p>"+theItem['description'];
   }
   if (itemNameLo =="student") {
     // console.log("itemNameLo = student");
-    $('#selectedCourseDescription').hide();
-    $('#selectedStudentDescription').show();
     appendItemListToSelectedItem(theItem, "student", "courses");
     var description = "<p>"+theItem['phone']+"<p>"+theItem['email'];
   }
    $('#defualtContainer').toggle(display("#selected"+itemNameUp+"Description"));
-  $('#newCourse').hide();
-  $('#newStudent').hide();
   console.log(theItem['name']);
   $('.selected'+itemNameUp+'Name').html(theItem['name']);
   $('.selected'+itemNameUp+'Description').empty().append(description);
+  $('.selected'+itemNameUp+'Photo').attr('src', 'dal/uploads/'+theItem['image']);
   $('.selected'+itemNameUp+'Edit').click(function(){ //---------click edit
     $('.new'+itemNameUp+'Title').html('edit '+itemNameLo);
     selectedItemEdit(theItem, itemNameLo, itemNameUp);
@@ -330,7 +348,7 @@ function whichUl(theItemNameLo){
     $('.welcomeMessege').hide();
     $('#newCourseBtn').show();
     $('.newCourseTitle').html('new course');
-    updateItemInputs('');
+    updateItemInputs('', 'course', 'Course');
     showNewCourseContainer();
   });
 
@@ -358,18 +376,19 @@ function whichUl(theItemNameLo){
     var id = item['id'];
     var name = item['name'];
     var image = item['image'];
-    if (itemNameLo == "student") {
+    if (itemNameLo == 'admin' || itemNameLo == 'student') {
       var phone = item['phone'];
       var email = item['email'];
       $('#new'+itemNameUp+'Email').val(email);
       $('#new'+itemNameUp+'Phone').val(phone);
+    }
+    if (itemNameLo == "student") {
       updateCheckboxes(item, 'courses');
     }
     if (itemNameLo == "course") {
       var description = item['description'];
       $('#new'+itemNameUp+'Description').val(description);
     }
-    $('#'+itemNameLo+'IdDelete').val(id);
     $('#new'+itemNameUp+'Name').val(name);
     $('#new'+itemNameUp+'Image').val(image);
   }
@@ -379,7 +398,9 @@ function whichUl(theItemNameLo){
     get = makeGetForNewOrUpdate(order, itemNameLo, itemNameUp);
     console.log(get);
     var url = 'dal/main.php?'+get;
-    emptyInputs(itemNameLo, itemNameUp);
+    if (checkInputForNull(itemNameLo, itemNameUp)) {
+      return;
+    }
     $.ajax({
       dataType: 'json',
       url: url,
@@ -405,7 +426,8 @@ function whichUl(theItemNameLo){
   function makeGetForNewOrUpdate(order, itemNameLo, itemNameUp){
     var get = '';
     var name = $('#new'+itemNameUp+'Name').val();
-    var image = $('#new'+itemNameUp+'Image').val();
+    // consoel.log(imageName);
+    var image = imageName;
     if (itemNameLo == "course") {
         var description = $('#new'+itemNameUp+'Description').val();
         get = 'courseName='+name+'&description='+description+'&courseImage='+image;
@@ -422,9 +444,11 @@ function whichUl(theItemNameLo){
         }
     }
     if(order == 'update'){
-      var id = $('#'+itemNameLo+'IdDelete').val();
-      console.log(id);
-      get = 'id='+id+"&"+get;
+      var data = {};
+      data['courses'] = allCourses;
+      data['students'] = allStudents;
+      var item = getSpecificItemByName(data, name, itemNameLo);
+      get = 'id='+item['id']+"&"+get;
     }
     return get;
   }
@@ -449,24 +473,25 @@ function whichUl(theItemNameLo){
 
   //------------delete course
 
-function deleteVar(varLower, varUp){
+function deleteVar(itemNameLo, itemNameUp){
       $('.note').empty();
-      var idInput = '#'+varLower+'IdDelete';
-      if ($(idInput).val() == ''){
-            $('.note').append("<br><p> please fill the relevant inputs");
-            return false;
-      }
-      if (!confirm("are you sure you want to delete that "+varLower+"?")) {
+      var name = $('#new'+itemNameUp+'Name').val();
+      var data = {};
+      data['courses'] = allCourses;
+      data['students'] = allStudents;
+      var item = getSpecificItemByName(data, name, itemNameLo);
+      var idInput = item['id'];
+      if (!confirm("are you sure you want to delete that "+itemNameLo+"?")) {
             return false;
       }
 
       $.ajax({
       dataType: 'json',
-      url:'dal/main.php?delete'+varUp+'='+$(idInput).val(),
+      url:'dal/main.php?delete'+itemNameUp+'='+idInput,
       type:'GET',
     }).done(function(data){
       if (data) {
-        findAndHideVarLi(varLower, $(idInput).val());
+        findAndHideVarLi(itemNameLo, $(idInput).val());
         appendAllData('delete', "");
       }
     }).fail(function(err){
@@ -484,8 +509,12 @@ function deleteVar(varLower, varUp){
     }
 
     function updateCheckboxes(item, listName){
-      console.log("update checkboxes ");
-      console.log(item);
+      // console.log("update checkboxes ");
+      // console.log(item);
+      if (item == "") {
+        $('input[type=checkbox]').checked = false;
+        return;
+      }
       var list =  item[listName];
         for(var j = 0; j < list.length; j++){
             console.log(list[j][0]);
@@ -510,7 +539,7 @@ function deleteVar(varLower, varUp){
         $('.welcomeMessege').empty();
         initItems(data['students'], 'student', 'Student');
         initItems(data['courses'], 'course', 'Course');
-        if (itemNameLo =! 'delete') {
+        if (itemNameLo != 'delete') {
           afterEditOrNew(itemNameLo, itemNameUp, data);
         }
       }).fail(function(err){
@@ -544,4 +573,102 @@ function deleteVar(varLower, varUp){
       $('#newStudent').hide();
       $('#defualtContainer').show();
     }
+
+$('.upload').click(function(){
+  uploadPic();
+});
+
+
+  function uploadPic(){
+      console.log('upload');
+      var filePath = whichPath();
+      var fileData = $(filePath).prop('files')[0];
+      var formData = new FormData();
+      formData.append('file', fileData);
+      $.ajax({
+          type: 'post',
+          cache: false,
+          contentType: false,
+          processData: false,
+          url: 'dal/upload.php',
+          dataType: 'text',
+          data: formData
+      }).done(function(data){
+        var parsedResponse = JSON.parse(data);
+          if(parsedResponse.status === 'success'){
+            var path = window.location.href.split('/index.html')[0];
+            $('.img').attr('src',path + '/dal/uploads/' + parsedResponse.fileName );
+            imageName = parsedResponse.fileName;
+          }
+      });
+  }
+
+  function whichPath(){
+    if($('.filePathC').prop('files')[0] != null){
+      return '.filePathC';
+    }
+    if ($('.filePathS').prop('files')[0] != null) {
+      return '.filePathS';
+    }
+  }
+
+  function getAdmins(){
+    $.ajax({
+      dataType:'json',
+      url:'dal/main.php?admins=0',
+      type: 'GET',
+    }).done(function(data){
+      console.log(data);
+      initItems(data, "admin", "Admin");
+      allAdmins = data;
+    }).fail(function(err){
+      console.log(err);
+    });
+  }
+
+  $('#adminLink').click(function(){
+    initAdminPage();
+  });
+
+  $('#adminBtn').click(function(){
+    $('#selectedAdminDescription').hide();
+    updateItemInputs('','admin','Admin');
+    showNewAdminPage();
+    $('.newAdminTitle').html('new admin');
+  });
+
+function initAdminPage(){
+  hideSchool();
+  showAdminPage();
+  showIfOwner();
+}
+
+function hideSchool(){
+  $('#coursesList').hide();
+  $('#studentsList').hide();
+  $('#newStudent').hide();
+  $('#newCourse').hide();
+  $('#selectedCourseDescription').hide();
+  $('#selectedStudentDescription').hide();
+  $('#defualtContainer').show();
+}
+
+function showAdminPage(){
+  $('#adminList').show();
+  $('#selectedAdminDescription').hide();
+}
+
+function showIfOwner(){
+  if (user['role'] == 'owner') {
+    $('#adminBtn').show();
+    $('.selectedAdminEdit').show();
+  }
+}
+
+function showNewAdminPage(){
+    console.log('toggle');
+    $('.note').empty();
+    $('#newAdmin').show();
+  }
+
 });

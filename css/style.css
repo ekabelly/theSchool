@@ -6,35 +6,33 @@
 	width: 66px;
 }
 
-.selectedStudentPhoto, .selectedCoursePhoto{
+.selectedStudentPhoto, .selectedCoursePhoto, .selectedAdminPhoto{
 	height: 138px;
 }
 
-#selectedCourseDescription, #selectedStudentDescription, #newCourse, #newStudent, #admin, #student, #editStudent, #course, #editCourse, #editAdmin {
+.selectedAdminEdit, #adminBtn, #adminList, #selectedCourseDescription, #selectedStudentDescription, #selectedAdminDescription, #newCourse, #newStudent, #newAdmin, #admin, #student, #editStudent, #course, #editCourse, #editAdmin {
 	display: none;
 }
 main {
 	padding-top: 50px;
 	width: 100%;
 }
-.coursesUl, .courseUl, .studentsUl, .studentUl, .courseHeadUl, .studentsHeadUl{
+.coursesUl, .courseUl, .studentsUl, .studentUl, .courseHeadUl, .studentsHeadUl, .adminHeadUl, .adminsUl, .adminUl{
 	list-style-type: none;
 	/*display: none;*/
 }
-.courseUl {
-	/*display: none;*/
-}
+
 #description {
 	border: 1px black solid;
 	box-sizing: border-box;
 	height: 500px;
 }
-.studentPhoto, .coursePhoto {
+.studentPhoto, .coursePhoto, .adminPhoto {
 	height: 60px;
 	width: 60px;
 	border: black solid 3px;
 }
-.studentLi, .courseLi {
+.studentLi, .courseLi, .adminLi {
 	display:flex;
     align-items:center;
 }
@@ -42,9 +40,6 @@ h3 {
 	margin-left: 40px;
 }
 
-/*#inputsEmpty{
-	display: none;
-}*/
 
 
 

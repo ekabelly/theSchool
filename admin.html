@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>the school</title>
+	<link href="css/style.css" rel="stylesheet">
+	<link rel="stylesheet" href="css/bootstrap.css">
+	<script src="js/jquery-3.2.1.js"></script>
+	<script src="js/script.js"></script>
+	<script src="js/bootstrap.js"></script>
+</head>
+<body style="display: none;">
+<header class="page-header row">
+<nav class="navbar navbar-default navbar-fixed-top">
+  <div class="container-fluid">
+    <div class="navbar-header">
+        <img alt="Brand" src="uploads/img/logo2.jpg" id="logo">
+    </div>
+    <ul class="nav navbar-nav" id="navLinks">
+    		<li id="schoolLink">
+    				<a role="button" href="index.html"> school</a>
+    		</li>
+    		<li id="adminLink">
+    				<a role="button" href="admin.html"> admin</a>
+    		</li>
+    	</ul>
+    	<ul class="nav navbar-nav navbar-right">
+    		<li>
+    			<a role="button" id="logoutBtn">logout</a>
+    		</li>
+    	</ul>
+        <p class="navbar-text navbar-right col-md-1" id="userNavDis"></p>
+  </div>
+</nav>
+</header>
+<main class="container">
+    <div id="index" class="container">
+        <div id="adminList" class="col-md-5">
+            <h3>
+                Administration
+                <button type="button" class="btn btn-default" id="adminBtn" aria-label="justify">
+                <span aria-hidden="true" class="glyphicon glyphicon-plus"></span>   
+            </h3>
+            <ul class="adminUl">
+                    <br>
+            </ul>
+        </div>
+        <div id="description"  class="col-md-7 container">
+            <div id="newAdmin">
+                <div class="header row">
+                    <button class="" id="newAdminBtn"> save </button>
+                    <button class="" id="editAdminBtn" style="display: none;"> save </button>
+                    <h3 class="newAdminTitle col-md-offset-1" style="display: inline;"></h3>
+                    <span class="deleteAdminSpan" style="display: none;">
+                    <button id="adminDeleteBtn" class="col-md-offset-6"> delete </button> 
+                    </span>
+                </div> <br>
+                <div class="row col-md-offset-1">
+                    <label for="newAdminName"> Admin name:</label>
+                    <input type="text" id="newAdminName" name="adminName">
+                </div> <br>
+                <div class="row col-md-offset-1">
+                    <label for="newAdminPhone"> phone </label>
+                    <input type="text" name="phone" id="newAdminPhone">
+                </div> <br>
+                <div class="row col-md-offset-1">
+                    <label for="newAdminEmail"> Email </label>
+                    <input type="email" name="email" id="newAdminEmail">
+                </div> <br>
+                <div class="row col-md-offset-1">
+                    <input class="filePathS" type="file"/>
+                    <button class="upload">Upload</button>
+                    <img src="" class="img col-md-4 selectedAdminPhoto">
+                </div><br>
+            </div>
+            <div id="defualtContainer" class="row">
+                <h6 class="welcomeMessege text-center" style="font-size: 200%"></h6>
+            </div>    
+        </div>
+    </div>
+</main>
+</body>
+</html>

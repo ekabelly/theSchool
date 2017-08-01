@@ -20,7 +20,7 @@
     				<a role="button" href="index.html"> school</a>
     		</li>
     		<li id="adminLink">
-    				<a role="button" href="admin.html"> admin</a>
+    				<a role="button"> admin</a>
     		</li>
     	</ul>
     	<ul class="nav navbar-nav navbar-right">
@@ -57,6 +57,16 @@
 					<br>
 				</ul>
 			</div>
+			<div id="adminList" class="col-md-5">
+	            <h3>
+	                Administration
+	                <button type="button" class="btn btn-default" id="adminBtn" aria-label="justify">
+	                <span aria-hidden="true" class="glyphicon glyphicon-plus"></span>   
+	            </h3>
+	            <ul class="adminsUl">
+	                    <br>
+	            </ul>
+        	</div>
 			<div id="description"  class="col-md-6 container">
 				<div id="newCourse" class="">
 					<div class="row">
@@ -64,9 +74,7 @@
 						<button class="" id="editCourseBtn" style="display: none;"> save </button>
 						<h3 class="newCourseTitle col-md-offset-1" style="display: inline;"> new course</h3>
 						<span class="deleteCourseSpan" style="display: none;">
-							<label for="courseIdDelete" class="col-md-offset-2"> id</label>
-							<input type="text" id="courseIdDelete" name="courseIdDelete">
-							<button id="courseDeleteBtn"> delete </button> 
+							<button id="courseDeleteBtn" class="col-md-offset-6"> delete </button> 
 						</span>
 					</div> <br>
 					<div class="row col-md-offset-1">
@@ -78,8 +86,9 @@
 						<textarea id="newCourseDescription"></textarea>
 					</div> <br>
 					<div class="row col-md-offset-1">
-						<label for="newCourseImage"> photo </label>
-						<input type="text" id="newCourseImage" name="newCourseImage">
+						<input class="filePathC" type="file"/>
+        				<button class="upload">Upload</button>
+        				<img src="" class="img col-md-4 selectedCoursePhoto">
 					</div>
 					<div class="selectedCourseStudentsP row col-md-offset-2 note"></div>
 				</div>
@@ -89,9 +98,7 @@
 						<button class="" id="editStudentBtn" style="display: none;"> save </button>
 							<h3 class="newStudentTitle col-md-offset-1" style="display: inline;"></h3>
 							<span class="deleteStudentSpan" style="display: none;">
-								<label for="studentIdDelete" class="col-md-offset-2"> id</label>
-								<input type="text" id="studentIdDelete" name="studentIdDelete">
-								<button id="studentDeleteBtn"> delete </button> 
+								<button id="studentDeleteBtn" class="col-md-offset-6"> delete </button> 
 							</span>
 						</div> <br>
 						<div class="row col-md-offset-1">
@@ -107,33 +114,65 @@
 							<input type="email" name="email" id="newStudentEmail">
 						</div> <br>
 						<div class="row col-md-offset-1">
-							<label for="newStudentImage"> photo </label>
-							<input type="text" id="newStudentImage" name="newStudentImage">
+							<input class="filePathS" type="file"/>
+        				<button class="upload">Upload</button>
+        				<img src="" class="img col-md-4 selectedStudentPhoto">
 						</div><br>
 					<div class="coursesCheckbox col-md-offset-1">
 					</div>
+					<div class="selectedCourseStudentsP row col-md-offset-2 note"></div>
 				</div>
+				<div id="newAdmin">
+	                <div class="header row">
+	                    <button class="" id="newAdminBtn"> save </button>
+	                    <button class="" id="editAdminBtn" style="display: none;"> save </button>
+	                    <h3 class="newAdminTitle col-md-offset-1" style="display: inline;"></h3>
+	                    <span class="deleteAdminSpan" style="display: none;">
+	                    <button id="adminDeleteBtn" class="col-md-offset-6"> delete </button> 
+	                    </span>
+	                </div> <br>
+	                <div class="row col-md-offset-1">
+	                    <label for="newAdminName"> Admin name:</label>
+	                    <input type="text" id="newAdminName" name="adminName">
+	                </div> <br>
+	                <div class="row col-md-offset-1">
+	                    <label for="newAdminPhone"> phone </label>
+	                    <input type="text" name="phone" id="newAdminPhone">
+	                </div> <br>
+	                <div class="row col-md-offset-1">
+	                    <label for="newAdminEmail"> Email </label>
+	                    <input type="email" name="email" id="newAdminEmail">
+	                </div> <br>
+	                <div class="row col-md-offset-1">
+	                    <input class="filePathS" type="file"/>
+	                    <button class="upload">Upload</button>
+	                    <img src="" class="img col-md-4 selectedAdminPhoto">
+	                </div><br>
+           		</div>
 				<div id="defualtContainer" class="row">
 					<h6 class="welcomeMessege text-center" style="font-size: 200%"></h6>
 				</div>
 				<div id="selectedCourseDescription">
 					<br>
 					<img  class='selectedCoursePhoto col-md-4' src="">
-					<h3 class="selectedCourseName col-md-6">selected course</h3>
+					<h3 class="selectedCourseName img col-md-6">selected course</h3>
 					<button class="selectedCourseEdit">edit</button>
 					<p class="selectedCourseDescription col-md-7"></p>
 					<ul class="selectedCourseStudentsUl col-md-12">
-						
 					</ul>
 				</div>
-				<div id="selectedStudentDescription">
-				<br>
-					<img  class='selectedStudentPhoto col-md-4' src="">
+				<div id="selectedAdminDescription">
+					<img  class='selectedAdminPhoto img col-md-4' src="">
+					<h3 class="selectedAdminName col-md-6">selected Admin</h3>
+					<button class="selectedAdminEdit">edit</button>
+					<p class="selectedAdminDescription col-md-7">Admin description Admin description Admin description Admin description Admin description Admin description Admin description Admin description Admin description Admin description Admin description Admin description Admin description Admin description Admin description Admin description Admin description Admin description Admin description</p>
+				</div>
+				<div id="selectedStudentDescription"> <br>
+					<img  class='selectedStudentPhoto img col-md-4' src="">
 					<h3 class="selectedStudentName col-md-6">selected student</h3>
 					<button class="selectedStudentEdit">edit</button>
 					<p class="selectedStudentDescription col-md-7">student description student description student description student description student description student description student description student description student description student description student description student description student description student description student description student description student description student description student description</p>
 					<ul class="selectedStudentCoursesUl col-md-12">
-						
 					</ul>
 				</div>
 			</div>

@@ -2,6 +2,7 @@
 require 'connectionOOP.php';
 include 'students.php';
 include 'courses.php';
+include 'admins.php';
 //---init
 if (isset($_GET['students'])) {		
 	$students = Student::getStudentDB($_GET['students']);
@@ -173,6 +174,15 @@ function deleteStudent($id){
 	}
 	return false;
 }
+
+//-----------------admins
+
+if (isset($_GET['admins'])) {		
+	$admins = Admin::getadminsDB($_GET['admins']);
+	// print_r($admins);
+	echo json_encode($admins);
+}
+
 
 // $course = new Courses('bible', '', '1', '');	
 // echo $course->sendToDB();
