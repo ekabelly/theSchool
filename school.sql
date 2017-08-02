@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jul 29, 2017 at 08:55 PM
+-- Generation Time: Aug 02, 2017 at 11:09 PM
 -- Server version: 10.1.21-MariaDB
 -- PHP Version: 5.6.30
 
@@ -32,6 +32,7 @@ CREATE TABLE `admin` (
   `role` varchar(255) NOT NULL,
   `phone` varchar(255) NOT NULL,
   `email` varchar(255) NOT NULL,
+  `image` varchar(255) NOT NULL,
   `password` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
@@ -39,11 +40,10 @@ CREATE TABLE `admin` (
 -- Dumping data for table `admin`
 --
 
-INSERT INTO `admin` (`id`, `name`, `role`, `phone`, `email`, `password`) VALUES
-(1, 'Ido', 'owner', '052', 'a@a', '1234'),
-(2, 'Amir', 'manager', '052', 'a@a', '1234'),
-(3, 'Eli', 'sales', '052', 'a@a', '1234'),
-(4, 'Yaniv', 'sales', '052', 'y@a', '1234');
+INSERT INTO `admin` (`id`, `name`, `role`, `phone`, `email`, `image`, `password`) VALUES
+(1, 'Ido', 'sales', '6666666', '11111', 'Jellyfish.jpg', '1234'),
+(2, 'Amir', 'sales', '052', 'a@a', 'Tulips.jpg', '1234'),
+(6, 'eli2', 'sales', '123455555', '111', 'Lighthouse.jpg', '1234');
 
 -- --------------------------------------------------------
 
@@ -63,12 +63,13 @@ CREATE TABLE `course` (
 --
 
 INSERT INTO `course` (`id`, `name`, `description`, `image`) VALUES
-(5, 'hebrew', '&#1513;&#1500;&#1493;&#1501; &#1506;&#1500;&#1497;&#1499;&#1501;', ''),
-(46, 'math', '1', ''),
-(63, 'gaming', '2', ''),
+(5, 'hebrew', '', 'lomdinivrit.png'),
+(46, 'math', '333', ''),
+(63, 'gaming', '2222', 'unnamed.jpg'),
 (70, 'history', '1234', ''),
 (73, 'english2', '3', ''),
-(92, 'JOKER', '12345', '');
+(92, 'JOKER', '12345', ''),
+(106, 'jquery', '124555', '');
 
 -- --------------------------------------------------------
 
@@ -87,9 +88,6 @@ CREATE TABLE `enrollment` (
 --
 
 INSERT INTO `enrollment` (`enroll_id`, `student_id`, `course_id`) VALUES
-(209, 2, 46),
-(213, 2, 70),
-(23, 2, 73),
 (33, 13, 5),
 (194, 13, 46),
 (195, 13, 63),
@@ -105,18 +103,18 @@ INSERT INTO `enrollment` (`enroll_id`, `student_id`, `course_id`) VALUES
 (160, 77, 70),
 (155, 77, 73),
 (163, 77, 92),
-(167, 78, 73),
 (165, 79, 46),
 (166, 79, 63),
+(236, 82, 5),
+(237, 82, 46),
 (176, 83, 46),
 (177, 83, 63),
 (216, 83, 70),
 (184, 84, 92),
-(191, 86, 63),
-(192, 86, 70),
-(193, 86, 73),
 (202, 87, 63),
-(203, 87, 70);
+(203, 87, 70),
+(234, 88, 46),
+(235, 88, 63);
 
 -- --------------------------------------------------------
 
@@ -137,19 +135,16 @@ CREATE TABLE `students` (
 --
 
 INSERT INTO `students` (`id`, `name`, `phone`, `email`, `image`) VALUES
-(2, 'hofit', '', '', ''),
-(13, 'matan', '321', 'wae', ''),
-(24, 'gamli', '1234', '12345', ''),
-(77, 'maya2', '111111111111', '1111111@111111', ''),
-(78, 'chen', '1111111111113', '1111111@111111', ''),
-(79, 'moshe', '1111111111113', '1111111@111111', ''),
-(82, 'dan', '1111111111113', '1111111@111111', ''),
-(83, 'chehzki', '1234', '1234', ''),
-(84, 'alex', '', '', ''),
+(13, 'matan', '321', '111', 'Penguins.jpg'),
+(24, 'gamli', '1234', '12345', 'Lighthouse.jpg'),
+(77, 'maya2', '111111111111', '1111111@1112', 'Chrysanthemum.jpg'),
+(79, 'moshe', '1111111111113', '1111111@111111', 'Jellyfish.jpg'),
+(82, 'dan', '1111111111113', '3@3', 'Tulips.jpg'),
+(83, 'chehzki', '1234', '1234', 'Koala.jpg'),
+(84, 'alex', '', '444@555', ''),
 (85, 'tal', '1234', 'hof@hof', ''),
-(86, 'hen', '1111111', '111111', ''),
 (87, 'sveta', '321', 'wae', ''),
-(88, 'yamit', '', '1234', '');
+(88, 'test', 'test', '1', '123');
 
 --
 -- Indexes for dumped tables
@@ -190,17 +185,17 @@ ALTER TABLE `students`
 -- AUTO_INCREMENT for table `admin`
 --
 ALTER TABLE `admin`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 --
 -- AUTO_INCREMENT for table `course`
 --
 ALTER TABLE `course`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=93;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=107;
 --
 -- AUTO_INCREMENT for table `enrollment`
 --
 ALTER TABLE `enrollment`
-  MODIFY `enroll_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=217;
+  MODIFY `enroll_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=240;
 --
 -- AUTO_INCREMENT for table `students`
 --

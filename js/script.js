@@ -37,7 +37,8 @@ function initUserInPage(data){
 
 
 $(document).ready(function(){
-
+var globalId = '';
+var globalName = ""
 var imageName = '123';
 //--------logout
 
@@ -127,7 +128,6 @@ function appendCoursesToStudent(courses){
 //-------------------save new student
 
   $('#newStudentBtn').click(function(){
-
     if(!checkInputForNull("student", "Student")){
       makeNewItem('new', "student", "Student");
     // showNewMadeItem("student", "Student", "new");
@@ -139,10 +139,18 @@ function checkInputForNull(itemNameLo, itemNameUp){
         if ($('#new'+itemNameUp+'Name').val() == "") {
             return messegeForEmptyInput();
         }
-        if (itemNameLo == 'student') {
-            if ($('#newStudentEmail').val() == "") {
+        if (itemNameLo != 'course') {
+            if ($('#new'+itemNameUp+'Email').val() == "") {
                 return messegeForEmptyInput();
             }
+        }
+        if (itemNameLo == 'admin') {
+          if ($('#newAdminPass').val() == "") {
+            return messegeForEmptyInput();
+          }
+          if ($('#newAdminRole').val() == null) {
+            return messegeForEmptyInput();
+          }
         }
         return false;
 }
@@ -151,11 +159,6 @@ function messegeForEmptyInput(){
     console.log("empty input");
     $('.note').append("<br><p> please fill a name & an email");
     return true;
-}
-
-function initNewStudent(theStudent){
-  showNewMadeItem("student", "Student", "new");
-  appendItemToList(theStudent, "student");
 }
 
 function coursesCheckboxes(){
@@ -223,16 +226,21 @@ function itemClicked(e, itemNameLo, itemNameUp, allItems){
 //-----------------edit course
 
 function selectedItemEdit(theItem, itemNameLo, itemNameUp){
+  globalId = theItem['id'];
+  // console.log(globalId);
   if (itemNameUp == "Course") {
+    globalName = theItem['name'];
     $('.delete'+itemNameUp+'Span').hide();
     showNewCourseContainer();
     // if (theItem['students_id'] == "") {$('.deleteCourseSpan').show();}
   }
   if (itemNameLo == "student") {
+    globalName = theItem['email'];
     $('.delete'+itemNameUp+'Span').show();
     showNewStudentPage();
   }
   if (itemNameLo == 'admin') {
+    globalName = theItem['email'];
     showNewAdminPage();
   }
   $('#edit'+itemNameUp+'Btn').show();
@@ -243,7 +251,7 @@ function selectedItemEdit(theItem, itemNameLo, itemNameUp){
   if (itemNameLo == "course") {
     // console.log(theItem);
     var courses = HowManyCoursesOnEdit(theItem);
-    console.log(courses);
+    // console.log(courses);
     if (courses == 0 && user['role'] != 'sales') {
       $('.delete'+itemNameUp+'Span').show();
     }
@@ -253,7 +261,7 @@ function selectedItemEdit(theItem, itemNameLo, itemNameUp){
 function HowManyCoursesOnEdit(theItem){
   $('.selectedCourseStudentsP').empty();
       var list = theItem['students'];
-      console.log(list);
+      // console.log(list);
       var listLength = list.length;
       if (list[0] == "") {listLength = 0;}
       $('.selectedCourseStudentsP').append("<p> there are "+listLength+" students attending this course");
@@ -274,7 +282,7 @@ function appendItemToList(theItem, itemNameLo){
     var id = theItem['id'];
     var name = theItem['name'];
     var image = theItem['image'];
-  $('.'+itemNameLo+'sUl').append("<li class='"+itemNameLo+"Li' value="+id+"><img  class='"+itemNameLo+"Photo' src='dal/uploads/"+image+"'><ul style='display:inline;' class='"+itemNameLo+"Ul'><li> "+id+" "+name);
+  $('.'+itemNameLo+'sUl').append("<li class='"+itemNameLo+"Li' value="+id+"><img  class='"+itemNameLo+"Photo' src='uploads/"+image+"'><ul style='display:inline;' class='"+itemNameLo+"Ul'><li> "+id+" "+name);
 }
 
 function createWelcomeMessege(allItems, itemNameLo){
@@ -312,7 +320,11 @@ function showSelectedItem(theItem, itemNameLo, itemNameUp){
   console.log(theItem['name']);
   $('.selected'+itemNameUp+'Name').html(theItem['name']);
   $('.selected'+itemNameUp+'Description').empty().append(description);
-  $('.selected'+itemNameUp+'Photo').attr('src', 'dal/uploads/'+theItem['image']);
+  if (theItem['image']) {
+    $('.selected'+itemNameUp+'Photo').attr('src', 'uploads/'+theItem['image']);
+  }else{
+    $('.selected'+itemNameUp+'Photo').attr('src', '');
+  }
   $('.selected'+itemNameUp+'Edit').click(function(){ //---------click edit
     $('.new'+itemNameUp+'Title').html('edit '+itemNameLo);
     selectedItemEdit(theItem, itemNameLo, itemNameUp);
@@ -353,7 +365,7 @@ function whichUl(theItemNameLo){
   });
 
   function showNewCourseContainer(){
-    console.log('toggle');
+    // console.log('toggle');
     $('.note').empty();
     $('#newStudent').hide();
     $('#selectedCourseDescription').hide();
@@ -381,11 +393,14 @@ function whichUl(theItemNameLo){
       var email = item['email'];
       $('#new'+itemNameUp+'Email').val(email);
       $('#new'+itemNameUp+'Phone').val(phone);
+      $('.filePathA').prop('files')[0] = image;
     }
     if (itemNameLo == "student") {
       updateCheckboxes(item, 'courses');
+      $('.filePathS').prop('files')[0] = image;
     }
     if (itemNameLo == "course") {
+      $('.filePathC').prop('files')[0] = image;
       var description = item['description'];
       $('#new'+itemNameUp+'Description').val(description);
     }
@@ -396,30 +411,28 @@ function whichUl(theItemNameLo){
   function makeNewItem(order, itemNameLo, itemNameUp){
     $('.note').empty();
     get = makeGetForNewOrUpdate(order, itemNameLo, itemNameUp);
-    console.log(get);
+    // console.log(get);
     var url = 'dal/main.php?'+get;
-    if (checkInputForNull(itemNameLo, itemNameUp)) {
-      return;
-    }
     $.ajax({
       dataType: 'json',
       url: url,
       type: 'GET',
     }).done(function(data){
-      console.log(data);
+      // console.log(data);
       appendAllData(itemNameLo, itemNameUp);
     }).fail(function(err){
       appendAllData(itemNameLo, itemNameUp);
-      console.log(JSON.stringify(err));
+      console.log('error '+JSON.stringify(err));
     });
   }
 
   function afterEditOrNew(itemNameLo, itemNameUp, data){
     allCourses = data['courses'];
     allStudents = data['students'];
-    var name = $('#new'+itemNameUp+'Name').val();
+    var nameOrEmail = (itemNameLo == 'course')?'Name':'Email';
+    var name = $('#new'+itemNameUp+nameOrEmail).val();
     var item = getSpecificItemByName(data, name, itemNameLo);
-    console.log(item);
+    // console.log(item);
     showSelectedItem(item, itemNameLo, itemNameUp);
   }
 
@@ -444,11 +457,13 @@ function whichUl(theItemNameLo){
         }
     }
     if(order == 'update'){
-      var data = {};
-      data['courses'] = allCourses;
-      data['students'] = allStudents;
-      var item = getSpecificItemByName(data, name, itemNameLo);
-      get = 'id='+item['id']+"&"+get;
+      // var data = {};
+      // data['courses'] = allCourses;
+      // data['students'] = allStudents;
+      // var name2 = (itemNameLo == 'course')?name:email;
+      // console.log(email);
+      // var item = getSpecificItemByName(data, name2, itemNameLo);
+      get = 'id='+globalId+"&"+get;
     }
     return get;
   }
@@ -475,24 +490,38 @@ function whichUl(theItemNameLo){
 
 function deleteVar(itemNameLo, itemNameUp){
       $('.note').empty();
-      var name = $('#new'+itemNameUp+'Name').val();
+      if (itemNameLo == 'course') {
+        var name = $('#new'+itemNameUp+'Name').val();
+      }else{
+        var name = $('#new'+itemNameUp+'Email').val();
+      }
       var data = {};
       data['courses'] = allCourses;
       data['students'] = allStudents;
+      data['admins'] = allAdmins;
       var item = getSpecificItemByName(data, name, itemNameLo);
       var idInput = item['id'];
       if (!confirm("are you sure you want to delete that "+itemNameLo+"?")) {
             return false;
       }
+      deleteAjax(idInput, itemNameLo, itemNameUp);
+}
 
-      $.ajax({
+function deleteAjax(idInput, itemNameLo, itemNameUp){
+  $.ajax({
       dataType: 'json',
       url:'dal/main.php?delete'+itemNameUp+'='+idInput,
       type:'GET',
     }).done(function(data){
       if (data) {
-        findAndHideVarLi(itemNameLo, $(idInput).val());
-        appendAllData('delete', "");
+        findAndHideVarLi(itemNameLo, idInput);
+        if (itemNameLo == 'admin') {
+          $('#newAdmin').hide();
+          $('#defualtContainer').show();
+          getAdmins();
+        }else{
+          appendAllData('delete', "");
+        }
       }
     }).fail(function(err){
       console.log(err);
@@ -505,7 +534,7 @@ function deleteVar(itemNameLo, itemNameUp){
   });
       
     function findAndHideVarLi(varLower, id){
-    $("."+varLower+"Li[value="+id+"]").hide();
+      $("."+varLower+"Li[value="+id+"]").hide();
     }
 
     function updateCheckboxes(item, listName){
@@ -517,7 +546,7 @@ function deleteVar(itemNameLo, itemNameUp){
       }
       var list =  item[listName];
         for(var j = 0; j < list.length; j++){
-            console.log(list[j][0]);
+            // console.log(list[j][0]);
             $.each($('input[type=checkbox]'), function(i, checkboxVal){
                 // console.log(list[j][0]+", "+checkboxVal['value']);
                 if (list[j][0] == checkboxVal['value']) {
@@ -555,17 +584,25 @@ function deleteVar(itemNameLo, itemNameUp){
                 if (allCourses[i]['name'] == name) {
                     return allCourses[i];
                 }
-            }
-                
+            }        
        }
        if (itemNameLo == "student") {
         allStudents = data['students'];
-             for (var i = allStudents.length - 1; i >= 0; i--) {
-                if (allStudents[i]['name'] == name) {
-                    return allStudents[i];
-                }
-            }
-       }
+        for (var i = allStudents.length - 1; i >= 0; i--) {
+          console.log(allStudents[i]['email']+"  "+name);
+          if (allStudents[i]['email'] == name) {
+            return allStudents[i];
+          }
+        }
+      }
+      if (itemNameLo == 'admin') {
+        allAdmins = data['admins'];
+        for (var i = allAdmins.length - 1; i >= 0; i--) {
+          if(allAdmins[i]['email'] == name){
+            return allAdmins[i];
+          }
+        }
+      }
     }
 
     function showMainContainer(){
@@ -580,7 +617,7 @@ $('.upload').click(function(){
 
 
   function uploadPic(){
-      console.log('upload');
+      // console.log('upload');
       var filePath = whichPath();
       var fileData = $(filePath).prop('files')[0];
       var formData = new FormData();
@@ -590,14 +627,14 @@ $('.upload').click(function(){
           cache: false,
           contentType: false,
           processData: false,
-          url: 'dal/upload.php',
+          url: 'upload.php',
           dataType: 'text',
           data: formData
       }).done(function(data){
         var parsedResponse = JSON.parse(data);
           if(parsedResponse.status === 'success'){
             var path = window.location.href.split('/index.html')[0];
-            $('.img').attr('src',path + '/dal/uploads/' + parsedResponse.fileName );
+            $('.img').attr('src',path + '/uploads/' + parsedResponse.fileName );
             imageName = parsedResponse.fileName;
           }
       });
@@ -609,6 +646,9 @@ $('.upload').click(function(){
     }
     if ($('.filePathS').prop('files')[0] != null) {
       return '.filePathS';
+    }
+    if ($('.filePathA').prop('files')[0] != null) {
+      return '.filePathA';
     }
   }
 
@@ -666,9 +706,63 @@ function showIfOwner(){
 }
 
 function showNewAdminPage(){
-    console.log('toggle');
-    $('.note').empty();
-    $('#newAdmin').show();
+  if (user['role'] == 'owner') {
+    $('.deleteAdminSpan').show();
   }
+  $('#selectedAdminDescription').hide();
+  // console.log('toggle');
+  $('.note').empty();
+  $('#newAdmin').show();
+}
+
+  $('#adminDeleteBtn').click(function(){
+    deleteVar('admin', 'Admin');
+  });
+
+  $('#editAdminBtn').click(function(){
+    if(!checkInputForNull('admin', 'Admin')){
+      newOrUpdateAdmin('update');
+      var data = {};
+      data['admins'] = allAdmins;
+      var admin = getSpecificItemByName(data, globalName, 'admin');
+      showSelectedItem(admin ,'admin', 'Admin');
+    }
+  });
+
+  $('#newAdminBtn').click(function(){
+    if(!checkInputForNull('admin', 'Admin')){
+      newOrUpdateAdmin('new');
+    }
+  })
+
+  function newOrUpdateAdmin(order){
+    $.ajax({
+      dataType: 'json',
+      url: 'dal/main.php',
+      type: 'POST',
+      data: makeNewAdminData(order)
+    }).done(function(data){
+      getAdmins();
+    }).fail(function(err){
+      console.log(err);
+      getAdmins();
+    });
+  }
+
+  function makeNewAdminData(order){
+    var admin = {};
+    admin['name'] = $('#newAdminName').val();
+    admin['email'] = $('#newAdminEmail').val();
+    admin['role'] = $('#newAdminRole').val();
+    admin['pass'] = $('#newAdminPass').val();
+    admin['image'] = imageName;
+    admin['phone'] = $('#newAdminPhone').val();
+    if (order == 'update') {
+      admin['id'] = globalId;
+    }
+    console.log(admin);
+    return admin;
+  }
+
 
 });

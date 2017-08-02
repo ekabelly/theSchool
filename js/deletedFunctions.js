@@ -237,3 +237,8 @@ delete student
   //  Database::close();
   //  return $students;
   // }
+
+  function initNewStudent(theStudent){
+  showNewMadeItem("student", "Student", "new");
+  appendItemToList(theStudent, "student");
+}

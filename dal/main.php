@@ -183,6 +183,45 @@ if (isset($_GET['admins'])) {
 	echo json_encode($admins);
 }
 
+if (isset($_GET['deleteAdmin'])) {
+	echo json_encode(deleteAdmin($_GET['deleteAdmin']));
+}
+
+function deleteAdmin($id){
+	$sql = "delete from admin where id = '$id'";
+	$result = conn($sql);
+	Database::close();
+	if ($result) {
+		return true;
+	}
+	return false;
+}
+
+if (isset($_POST['name'])) {
+	if (isset($_POST['id'])) {
+		updateAdmin();
+	}else{
+		echo "insert";
+	}
+}
+
+function updateAdmin(){
+	$id = $_POST['id'];
+	$name = $_POST['name'];
+	$phone = $_POST['phone'];
+	$email = $_POST['email'];
+	$image = $_POST['image'];
+	$pass = $_POST['pass'];
+	$role = $_POST['role'];
+	$sql = "UPDATE admin SET id='$id',name='$name',role='$role', phone='$phone',email='$email', image='$image', password='$pass' WHERE id='$id'";
+	$result = conn($sql);
+	Database::close();
+	if ($result) {
+		echo true;
+	}else{
+		echo false;
+	}
+}
 
 // $course = new Courses('bible', '', '1', '');	
 // echo $course->sendToDB();

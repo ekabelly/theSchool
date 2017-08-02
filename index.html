@@ -44,7 +44,7 @@
 				</h3>
 				<ul class="coursesUl">
 					<br>
-				</ul>
+				</ul> email
 			</div>
 			<div id="studentsList" class="col-md-3">
 				<h3>
@@ -107,11 +107,11 @@
 						</div> <br>
 						<div class="row col-md-offset-1">
 							<label for="newStudentPhone"> phone </label>
-							<input type="text" name="phone" id="newStudentPhone">
+							<input type="tel" name="phone" id="newStudentPhone">
 						</div> <br>
 						<div class="row col-md-offset-1">
 							<label for="newStudentEmail"> Email </label>
-							<input type="email" name="email" id="newStudentEmail">
+							<input type="email" name="email" id="newStudentEmail" required>
 						</div> <br>
 						<div class="row col-md-offset-1">
 							<input class="filePathS" type="file"/>
@@ -134,17 +134,25 @@
 	                <div class="row col-md-offset-1">
 	                    <label for="newAdminName"> Admin name:</label>
 	                    <input type="text" id="newAdminName" name="adminName">
+	                    <select class="col-md-offset-1" id="newAdminRole">
+	                    	<option> sales </option>
+	                    	<option> manager </option>
+	                    </select>
+	                </div> <br>
+	                <div class="row col-md-offset-1">
+	                    <label for="newAdminPass"> password:</label>
+	                    <input type="password" id="newAdminPass" name="adminPass">
 	                </div> <br>
 	                <div class="row col-md-offset-1">
 	                    <label for="newAdminPhone"> phone </label>
-	                    <input type="text" name="phone" id="newAdminPhone">
+	                    <input type="tel" name="phone" id="newAdminPhone">
 	                </div> <br>
 	                <div class="row col-md-offset-1">
 	                    <label for="newAdminEmail"> Email </label>
 	                    <input type="email" name="email" id="newAdminEmail">
 	                </div> <br>
 	                <div class="row col-md-offset-1">
-	                    <input class="filePathS" type="file"/>
+	                    <input class="filePathA" type="file"/>
 	                    <button class="upload">Upload</button>
 	                    <img src="" class="img col-md-4 selectedAdminPhoto">
 	                </div><br>
