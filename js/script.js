@@ -49,8 +49,7 @@ var allAdmins = {};
 initPage();
 
 function initPage(){
-  getStudents();
-  getCourses();
+  appendAllData('','');
   getAdmins();
 }
 
@@ -68,7 +67,7 @@ function initPage(){
         $('.welcomeMessege').empty();
         initItems(data['students'], 'student', 'Student');
         initItems(data['courses'], 'course', 'Course');
-        if (itemNameLo != 'delete') {
+        if (itemNameLo != 'delete' && itemNameLo != '') {
           afterEditOrNew(itemNameLo, itemNameUp, data);
         }
       }).fail(function(err){
@@ -77,36 +76,63 @@ function initPage(){
 
     }
 
-  //--------students get
+//----------get admins
 
-function getStudents(){
-   $.ajax({
-        dataType:'json',
-        url:'dal/main.php?students=0',
-        type: 'GET',
-      }).done(function(data){
-        console.log(data);
-        initItems(data, "student", "Student");
-        allStudents = data;
-      }).fail(function(err){
-        console.log(err);
-      });
-    }
+function getAdmins(){
+    $.ajax({
+      dataType:'json',
+      url:'dal/main.php?admins=0',
+      type: 'GET',
+    }).done(function(data){
+      console.log(data);
+      initItems(data, "admin", "Admin");
+      allAdmins = data;
+    }).fail(function(err){
+      console.log(err);
+    });
+  }
 
-  //------courses get
+//------------------make a new admin/student/course
 
-function getCourses(){
+   function makeNewItem(order, itemNameLo, itemNameUp){
+    $('.note').empty();
+    get = makeGetForNewOrUpdate(order, itemNameLo, itemNameUp);
+    // console.log(get);
+    var url = 'dal/main.php?'+get;
+    $.ajax({
+      dataType: 'json',
+      url: url,
+      type: 'GET',
+    }).done(function(data){
+      // console.log(data);
+      appendAllData(itemNameLo, itemNameUp);
+    }).fail(function(err){
+      appendAllData(itemNameLo, itemNameUp);
+      console.log('error '+JSON.stringify(err));
+    });
+  }
+
+//--------------delete ajax
+
+function deleteAjax(idInput, itemNameLo, itemNameUp){
   $.ajax({
-    dataType:'json',
-    url:'dal/main.php?courses=0',
-    type: 'GET',
-  }).done(function(data){
-    // console.log(data);
-    initItems(data, "course", "Course");
-    allCourses = data;
-  }).fail(function(err){
-    console.log(err);
-  });
+      dataType: 'json',
+      url:'dal/main.php?delete'+itemNameUp+'='+idInput,
+      type:'GET',
+    }).done(function(data){
+      if (data) {
+        findAndHideVarLi(itemNameLo, idInput);
+        if (itemNameLo == 'admin') {
+          $('#newAdmin').hide();
+          $('#defualtContainer').show();
+          getAdmins();
+        }else{
+          appendAllData('delete', "");
+        }
+      }
+    }).fail(function(err){
+      console.log(err);
+   });     
 }
 
 //----------students only functions----------
@@ -177,6 +203,23 @@ function coursesCheckboxes(){
       showMainContainer();
   });
 
+//--------------update the courses checkboxes on student edit
+
+function updateCheckboxes(item, listName){
+      if (item == "") {
+        $('input[type=checkbox]').checked = false;
+        return;
+      }
+      var list =  item[listName];
+        for(var j = 0; j < list.length; j++){
+            $.each($('input[type=checkbox]'), function(i, checkboxVal){
+                if (list[j][0] == checkboxVal['value']) {
+                    checkboxVal.checked = true;
+                }
+            });
+        }
+    }
+
 //------------courses only function-----------
 //-----------------edit course
 
@@ -226,110 +269,6 @@ function HowManyCoursesOnEdit(theItem){
     }
   });
 
-  function updateItemInputs(item, itemNameLo, itemNameUp){
-    var id = item['id'];
-    var name = item['name'];
-    var image = item['image'];
-    if (itemNameLo == 'admin' || itemNameLo == 'student') {
-      var phone = item['phone'];
-      var email = item['email'];
-      $('#new'+itemNameUp+'Email').val(email);
-      $('#new'+itemNameUp+'Phone').val(phone);
-      // $('.filePathA').prop('files')[0] = image;
-    }
-    if (itemNameLo == "student") {
-      updateCheckboxes(item, 'courses');
-      // $('.filePathS').prop('files')[0] = image;
-    }
-    if (itemNameLo == "course") {
-      // $('.filePathC').prop('files')[0] = image;
-      var description = item['description'];
-      $('#new'+itemNameUp+'Description').val(description);
-    }
-    $('#newAdminPass').val('');
-    $('#new'+itemNameUp+'Name').val(name);
-    $('#new'+itemNameUp+'Image').val(image);
-    $('.selected'+itemNameUp+'Photo').attr('src', '');
-  }
-
-  function makeNewItem(order, itemNameLo, itemNameUp){
-    $('.note').empty();
-    get = makeGetForNewOrUpdate(order, itemNameLo, itemNameUp);
-    // console.log(get);
-    var url = 'dal/main.php?'+get;
-    $.ajax({
-      dataType: 'json',
-      url: url,
-      type: 'GET',
-    }).done(function(data){
-      // console.log(data);
-      appendAllData(itemNameLo, itemNameUp);
-    }).fail(function(err){
-      appendAllData(itemNameLo, itemNameUp);
-      console.log('error '+JSON.stringify(err));
-    });
-  }
-
-  function afterEditOrNew(itemNameLo, itemNameUp, data){
-    allCourses = data['courses'];
-    allStudents = data['students'];
-    var nameOrEmail = (itemNameLo == 'course')?'Name':'Email';
-    var name = $('#new'+itemNameUp+nameOrEmail).val();
-    var item = getSpecificItemByName(data, name, itemNameLo);
-    // console.log(item);
-    showSelectedItem(item, itemNameLo, itemNameUp);
-  }
-
-  function makeGetForNewOrUpdate(order, itemNameLo, itemNameUp){
-    var get = '';
-    var name = $('#new'+itemNameUp+'Name').val();
-    // consoel.log(imageName);
-    var image = imageName;
-    if (itemNameLo == "course") {
-        var description = $('#new'+itemNameUp+'Description').val();
-        get = 'courseName='+name+'&description='+description+'&courseImage='+image;
-    }
-    if (itemNameLo == "student") {
-        var phone = $('#new'+itemNameUp+'Phone').val();
-        var email = $('#new'+itemNameUp+'Email').val();
-        var courses = coursesCheckboxes();
-        courses = transferNameToId(courses, 'course');
-        courses = courses.join(", ");
-        get = 'studentName='+name+'&email='+email+'&phone='+phone+'&studentImage='+image+'&courses_id='+courses;
-        if (order == 'update') {
-          get = 'studentName='+name+'&email='+email+'&phone='+phone+'&studentImage='+image+'&coursesUpdate='+courses; 
-        }
-    }
-    if(order == 'update'){
-      // var data = {};
-      // data['courses'] = allCourses;
-      // data['students'] = allStudents;
-      // var name2 = (itemNameLo == 'course')?name:email;
-      // console.log(email);
-      // var item = getSpecificItemByName(data, name2, itemNameLo);
-      get = 'id='+globalId+"&"+get;
-    }
-    return get;
-  }
-
-
-  //-----------------transfer Name array To Id array
-
-  function transferNameToId(itemsArr, itemNameLo){
-    // console.log("all courses new function "+allCourses);
-    if (itemNameLo == 'course') {
-      var allItems = allCourses;
-    }
-    for (var i = itemsArr.length - 1; i >= 0; i--) {
-      for (var j = allItems.length - 1; j >= 0; j--) {
-        if (itemsArr[i] == allItems[j]['name']) {
-          itemsArr[i] = allItems[j]['id'];
-        }
-      }
-    }
-    return itemsArr;
-  }
-
   //------------delete course
 
 function deleteVar(itemNameLo, itemNameUp){
@@ -351,76 +290,12 @@ function deleteVar(itemNameLo, itemNameUp){
       deleteAjax(idInput, itemNameLo, itemNameUp);
 }
 
-function deleteAjax(idInput, itemNameLo, itemNameUp){
-  $.ajax({
-      dataType: 'json',
-      url:'dal/main.php?delete'+itemNameUp+'='+idInput,
-      type:'GET',
-    }).done(function(data){
-      if (data) {
-        findAndHideVarLi(itemNameLo, idInput);
-        if (itemNameLo == 'admin') {
-          $('#newAdmin').hide();
-          $('#defualtContainer').show();
-          getAdmins();
-        }else{
-          appendAllData('delete', "");
-        }
-      }
-    }).fail(function(err){
-      console.log(err);
-   });     
-}
-
   $('#courseDeleteBtn').click(function(){
       deleteVar("course", "Course");
       showMainContainer();
   });
-      
-    function findAndHideVarLi(varLower, id){
-      $("."+varLower+"Li[value="+id+"]").hide();
-    }
 
-    function updateCheckboxes(item, listName){
-      // console.log("update checkboxes ");
-      // console.log(item);
-      if (item == "") {
-        $('input[type=checkbox]').checked = false;
-        return;
-      }
-      var list =  item[listName];
-        for(var j = 0; j < list.length; j++){
-            // console.log(list[j][0]);
-            $.each($('input[type=checkbox]'), function(i, checkboxVal){
-                // console.log(list[j][0]+", "+checkboxVal['value']);
-                if (list[j][0] == checkboxVal['value']) {
-                    checkboxVal.checked = true;
-                }
-            });
-        }
-    }
-
-
-
-
-
-
-
-  //------------------------------admin--------------
-
-  function getAdmins(){
-    $.ajax({
-      dataType:'json',
-      url:'dal/main.php?admins=0',
-      type: 'GET',
-    }).done(function(data){
-      console.log(data);
-      initItems(data, "admin", "Admin");
-      allAdmins = data;
-    }).fail(function(err){
-      console.log(err);
-    });
-  }
+  //---------------------admin functions only--------------
 
   $('#adminLink').click(function(){
     initAdminPage();
@@ -432,6 +307,26 @@ function deleteAjax(idInput, itemNameLo, itemNameUp){
     showNewAdminPage();
     showOrHideIfNewAdmin();
   });
+
+  $('#adminDeleteBtn').click(function(){
+    deleteVar('admin', 'Admin');
+  });
+
+  $('#editAdminBtn').click(function(){
+    if(!checkInputForNull('admin', 'Admin')){
+      newOrUpdateAdmin('update');
+      var data = {};
+      data['admins'] = allAdmins;
+      var admin = getSpecificItemByName(data, globalName, 'admin');
+      showSelectedItem(admin ,'admin', 'Admin');
+    }
+  });
+
+  $('#newAdminBtn').click(function(){
+    if(!checkInputForNull('admin', 'Admin')){
+      newOrUpdateAdmin('new');
+    }
+  })
 
 function showOrHideIfNewAdmin(){
   $('.passDiv').show();
@@ -478,26 +373,6 @@ function showNewAdminPage(){
   $('.note').empty();
   $('#newAdmin').show();
 }
-
-  $('#adminDeleteBtn').click(function(){
-    deleteVar('admin', 'Admin');
-  });
-
-  $('#editAdminBtn').click(function(){
-    if(!checkInputForNull('admin', 'Admin')){
-      newOrUpdateAdmin('update');
-      var data = {};
-      data['admins'] = allAdmins;
-      var admin = getSpecificItemByName(data, globalName, 'admin');
-      showSelectedItem(admin ,'admin', 'Admin');
-    }
-  });
-
-  $('#newAdminBtn').click(function(){
-    if(!checkInputForNull('admin', 'Admin')){
-      newOrUpdateAdmin('new');
-    }
-  })
 
   function newOrUpdateAdmin(order){
     $.ajax({
@@ -695,17 +570,9 @@ function itemClicked(e, itemNameLo, itemNameUp, allItems){
             if(!isEmail($('#new'+itemNameUp+'Email').val())){
               return messegeForEmptyInput();
             }
-            if (!isUsername($('#new'+itemNameUp+'Name').val())) {
+            if (isUsername($('#new'+itemNameUp+'Name').val())) {
               return messegeForEmptyInput();
             }
-        }
-        if (itemNameLo == 'admin') {
-          if ($('#newAdminPass').val() == "") {
-            return messegeForEmptyInput();
-          }
-          if ($('#newAdminRole').val() == null) {
-            return messegeForEmptyInput();
-          }
         }
         return false;
 }
@@ -785,6 +652,87 @@ function showMainContainer(){
     $('.note').empty().append("<p> name is taken.");
     return true;
   }
+
+  function updateItemInputs(item, itemNameLo, itemNameUp){
+    var id = item['id'];
+    var name = item['name'];
+    var image = item['image'];
+    if (itemNameLo == 'admin' || itemNameLo == 'student') {
+      var phone = item['phone'];
+      var email = item['email'];
+      $('#new'+itemNameUp+'Email').val(email);
+      $('#new'+itemNameUp+'Phone').val(phone);
+    }
+    if (itemNameLo == "student") {
+      updateCheckboxes(item, 'courses');
+    }
+    if (itemNameLo == "course") {
+      var description = item['description'];
+      $('#new'+itemNameUp+'Description').val(description);
+    }
+    $('#newAdminPass').val('');
+    $('#new'+itemNameUp+'Name').val(name);
+    $('#new'+itemNameUp+'Image').val(image);
+    $('.selected'+itemNameUp+'Photo').attr('src', '');
+  }
+
+  function afterEditOrNew(itemNameLo, itemNameUp, data){
+    allCourses = data['courses'];
+    allStudents = data['students'];
+    var nameOrEmail = (itemNameLo == 'course')?'Name':'Email';
+    var name = $('#new'+itemNameUp+nameOrEmail).val();
+    var item = getSpecificItemByName(data, name, itemNameLo);
+    showSelectedItem(item, itemNameLo, itemNameUp);
+  }
+
+  function makeGetForNewOrUpdate(order, itemNameLo, itemNameUp){
+    var get = '';
+    var name = $('#new'+itemNameUp+'Name').val();
+    var image = imageName;
+    if (itemNameLo == "course") {
+        var description = $('#new'+itemNameUp+'Description').val();
+        get = 'courseName='+name+'&description='+description+'&courseImage='+image;
+    }
+    if (itemNameLo == "student") {
+        var phone = $('#new'+itemNameUp+'Phone').val();
+        var email = $('#new'+itemNameUp+'Email').val();
+        var courses = coursesCheckboxes();
+        courses = transferNameToId(courses, 'course');
+        courses = courses.join(", ");
+        get = 'studentName='+name+'&email='+email+'&phone='+phone+'&studentImage='+image+'&courses_id='+courses;
+        if (order == 'update') {
+          get = 'studentName='+name+'&email='+email+'&phone='+phone+'&studentImage='+image+'&coursesUpdate='+courses; 
+        }
+    }
+    if(order == 'update'){
+      get = 'id='+globalId+"&"+get;
+    }
+    return get;
+  }
+
+//----------after deleting an item this will make it dissapear from its main list
+
+  function findAndHideVarLi(varLower, id){
+      $("."+varLower+"Li[value="+id+"]").hide();
+    }
+
+    //-----------------transfer Name array To Id array (mainly for the course list)
+
+  function transferNameToId(itemsArr, itemNameLo){
+    // console.log("all courses new function "+allCourses);
+    if (itemNameLo == 'course') {
+      var allItems = allCourses;
+    }
+    for (var i = itemsArr.length - 1; i >= 0; i--) {
+      for (var j = allItems.length - 1; j >= 0; j--) {
+        if (itemsArr[i] == allItems[j]['name']) {
+          itemsArr[i] = allItems[j]['id'];
+        }
+      }
+    }
+    return itemsArr;
+  }
+
 
   //--------------------pictures and upload-----------
 

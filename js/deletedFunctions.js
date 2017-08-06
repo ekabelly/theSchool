@@ -1,3 +1,6 @@
+//these are functions which i have initialy created but then removed from the script due to ineffeciancy.
+
+
  delete course btn
  //     $('.note').empty();
   //     var idInput = '#'+var+'IdDelete';
@@ -238,7 +241,39 @@ delete student
   //  return $students;
   // }
 
-  function initNewStudent(theStudent){
-  showNewMadeItem("student", "Student", "new");
-  appendItemToList(theStudent, "student");
-}
+//   function initNewStudent(theStudent){
+//   showNewMadeItem("student", "Student", "new");
+//   appendItemToList(theStudent, "student");
+// }
+
+ //--------students get
+
+// function getStudents(){
+//    $.ajax({
+//         dataType:'json',
+//         url:'dal/main.php?students=0',
+//         type: 'GET',
+//       }).done(function(data){
+//         console.log(data);
+//         initItems(data, "student", "Student");
+//         allStudents = data;
+//       }).fail(function(err){
+//         console.log(err);
+//       });
+//     }
+
+//   //------courses get
+
+// function getCourses(){
+//   $.ajax({
+//     dataType:'json',
+//     url:'dal/main.php?courses=0',
+//     type: 'GET',
+//   }).done(function(data){
+//     // console.log(data);
+//     initItems(data, "course", "Course");
+//     allCourses = data;
+//   }).fail(function(err){
+//     console.log(err);
+//   });
+// }
