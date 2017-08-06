@@ -3,7 +3,7 @@ session_start();
 require 'connectionOOP.php';
 if (isset($_POST['username']) && isset($_POST['pass'])) {
 	$username = $_POST['username'];
-	$pass = $_POST['pass'];
+	$pass = md5($_POST['pass']);
 	$sql = "SELECT * FROM admin WHERE name = '$username' and password = '$pass'";
 	$result = conn($sql);
 	$row = mysqli_fetch_row($result);

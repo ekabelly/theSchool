@@ -201,7 +201,14 @@ if (isset($_POST['name'])) {
 	if (isset($_POST['id'])) {
 		updateAdmin();
 	}else{
-		echo "insert";
+		$name = $_POST['name'];
+		$role = $_POST['role'];
+		$phone = $_POST['phone'];
+		$email = $_POST['email'];
+		$image = $_POST['image'];
+		$pass = md5($_POST['pass']);
+		$admin = new Admin($name, $role, $phone, $email, $image, $pass);
+		echo json_encode($admin->sendToDB());
 	}
 }
 
@@ -211,9 +218,9 @@ function updateAdmin(){
 	$phone = $_POST['phone'];
 	$email = $_POST['email'];
 	$image = $_POST['image'];
-	$pass = $_POST['pass'];
+	// $pass = md5($_POST['pass']);
 	$role = $_POST['role'];
-	$sql = "UPDATE admin SET id='$id',name='$name',role='$role', phone='$phone',email='$email', image='$image', password='$pass' WHERE id='$id'";
+	$sql = "UPDATE admin SET id='$id',name='$name',role='$role', phone='$phone',email='$email', image='$image' WHERE id='$id'";
 	$result = conn($sql);
 	Database::close();
 	if ($result) {
@@ -222,6 +229,8 @@ function updateAdmin(){
 		echo false;
 	}
 }
+
+
 
 // $course = new Courses('bible', '', '1', '');	
 // echo $course->sendToDB();
